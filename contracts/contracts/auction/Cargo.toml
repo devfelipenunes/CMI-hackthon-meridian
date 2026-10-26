@@ -1,0 +1,38 @@
+[package]
+name = "auction"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+# `cdylib` is what Stellar deploys; `rlib` is what lets the crate's own tests
+# use the modules without crossing a contract boundary.
+crate-type = ["cdylib", "rlib"]
+doctest = false
+
+[dependencies]
+# The constants, the shared types and the config validation. The Factory depends
+# on the same crate - not this one - to avoid dragging the `#[contractimpl]` exports into its own
+# WASM (see the `shared` `lib.rs`).
+shared = { path = "../shared" }
+# The Poseidon2 sponge comes ready from the Stellar ecosystem (`soroban-poseidon`), instead of
+# vendored round constants. See step 0.4 of the ROADMAP.
+soroban-poseidon = "26.0.0"
+soroban-sdk = "26.0.1"
+
+[features]
+# Code used only by the tests, which must not exist in the production contract - today, the Rust
+# mirror of the commitment (`crypto::commitment`). Unit tests see it through `cfg(test)`; the
+# integration tests (`tests/`) link the crate as an external dependency, which is why they request
+# it through the dev-dependency below. `stellar contract build` does not enable the feature, so the
+# WASM excludes it.
+testutils = []
+
+[dev-dependencies]
+# The crate itself, with `testutils`: it is how the `tests/` binaries see what
+# `cfg(test)` hides from them.
+auction = { path = ".", features = ["testutils"] }
+# The fixture's `context.json` (step 3.2) is JSON with four numbers and three strings: a real
+# reader costs one line and leaves no room for the format to diverge silently.
+serde_json = "1"
+soroban-sdk = { version = "26.0.1", features = ["testutils"] }

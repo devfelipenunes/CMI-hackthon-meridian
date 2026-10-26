@@ -1,0 +1,14 @@
+[package]
+name = "shared"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+# `rlib` only: this is not a contract, it is the code that both contracts link. It has no
+# `cdylib`, so `stellar contract build` does not try to publish a WASM for it.
+crate-type = ["rlib"]
+doctest = false
+
+[dependencies]
+soroban-sdk = "26.0.1"
