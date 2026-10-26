@@ -1,0 +1,8 @@
+[package]
+name = "settlement_binding"
+type = "bin"
+authors = [""]
+compiler_version = ">=1.0.0"
+
+[dependencies]
+cmi_lib = { path = "../cmi_lib" }

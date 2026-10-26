@@ -1,0 +1,2 @@
+[workspace]
+members = ["cmi_lib", "bid_validity", "winner_allocation", "settlement_binding"]
