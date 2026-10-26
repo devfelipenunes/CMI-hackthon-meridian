@@ -25,7 +25,7 @@
     "token:issue": "tsx scripts/issue-quota-token.ts",
     "fund": "tsx scripts/fund.ts",
     "check:toolchain": "bash scripts/check-toolchain.sh",
-    "prebuild": "corepack pnpm --filter @ctd/sdk run build"
+    "prebuild": "corepack pnpm -C ../sdk install --no-frozen-lockfile --prod=false && corepack pnpm --filter @ctd/sdk run build"
   },
   "devDependencies": {
     "@eslint/js": "9.39.5",

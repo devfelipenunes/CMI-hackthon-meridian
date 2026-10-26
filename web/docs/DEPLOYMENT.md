@@ -7,7 +7,7 @@ O front-end é uma SPA Vite estática. O operador não faz parte deste deploy: e
 1. Importe o repositório no painel da Vercel.
 2. Em **Root Directory**, escolha `web`.
 3. Em **Build and Output Settings**, use:
-   - Install Command: `corepack enable && (cd ../sdk && pnpm install --no-frozen-lockfile --prod=false) && pnpm install --no-frozen-lockfile --prod=false`
+   - Install Command: `corepack enable && pnpm install --no-frozen-lockfile --prod=false`
    - Build Command: `pnpm build`
    - Output Directory: `app/dist`
 4. Em **Node.js Version**, selecione `22.x`.
@@ -16,7 +16,10 @@ O front-end é uma SPA Vite estática. O operador não faz parte deste deploy: e
 
 `vercel.json` redireciona rotas que pertencem ao React Router, por exemplo `/market/1` e `/company`, para `index.html`. Sem isso, abrir essas URLs diretamente retornaria 404.
 
-O front e o SDK têm workspaces e lockfiles separados. O comando de instalação prepara ambos para disponibilizar os tipos e as dependências usados pelo build.
+O front e o SDK têm workspaces e lockfiles separados. O `prebuild` do `pnpm build` instala o workspace
+do SDK (`pnpm -C ../sdk install`) e compila `@ctd/sdk`; é isso que disponibiliza os tipos e as dependências
+que o typecheck e o Vite leem. O Install Command não precisa preparar o SDK — e o build funciona mesmo quando
+o painel da Vercel sobrescreve esse comando.
 
 ## Antes de publicar
 
