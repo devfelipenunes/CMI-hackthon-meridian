@@ -1,0 +1,46 @@
+name: check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Os submódulos são privados; o PAT só-leitura é cadastrado pelo dono do projeto.
+          token: ${{ secrets.SUBMODULES_TOKEN }}
+          submodules: true
+
+      - name: Credencial para os submódulos aninhados
+        run: git config --global url."https://x-access-token:${{ secrets.SUBMODULES_TOKEN }}@github.com/".insteadOf "https://github.com/"
+
+      - name: Submódulos do SDK
+        run: git -C sdk submodule update --init
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - run: corepack enable
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.34.6
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm check:toolchain
+
+      - run: pnpm lint
+
+      - run: pnpm test
+
+      - run: pnpm test:bundle

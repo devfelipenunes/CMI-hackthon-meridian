@@ -1,0 +1,54 @@
+{
+  "name": "cmi-front-end",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.34.6",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "corepack pnpm --filter @zolvency-cmi/app dev",
+    "build": "corepack pnpm --filter @zolvency-cmi/app build",
+    "preview": "corepack pnpm --filter @zolvency-cmi/app preview",
+    "lint": "eslint . && corepack pnpm run depcruise && corepack pnpm run typecheck",
+    "depcruise": "depcruise app/src --config .dependency-cruiser.cjs",
+    "typecheck": "corepack pnpm --filter @zolvency-cmi/app run typecheck && corepack pnpm --filter @zolvency-cmi/scripts run typecheck",
+    "test": "vitest run --project unit --project flows --project scripts",
+    "test:watch": "vitest --project unit --project flows --project scripts",
+    "test:bundle": "corepack pnpm build && vitest run --project bundle",
+    "test:browser": "vitest run --project browser",
+    "verify": "corepack pnpm lint && corepack pnpm test && corepack pnpm test:bundle",
+    "e2e": "playwright test",
+    "sync:deployment": "tsx scripts/sync-deployment.ts",
+    "register-data": "tsx scripts/register-data.ts",
+    "token:issue": "tsx scripts/issue-quota-token.ts",
+    "fund": "tsx scripts/fund.ts",
+    "check:toolchain": "bash scripts/check-toolchain.sh",
+    "postinstall": "corepack pnpm --filter @ctd/sdk run build"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@playwright/test": "1.55.1",
+    "@types/node": "22.20.5",
+    "@vitest/browser": "3.2.7",
+    "dependency-cruiser": "17.4.3",
+    "eslint": "9.39.5",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-refresh": "0.5.7",
+    "globals": "17.13.0",
+    "playwright": "1.55.1",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.71.0",
+    "vitest": "3.2.7"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ],
+    "ignoredBuiltDependencies": [
+      "msgpackr-extract"
+    ]
+  }
+}

@@ -1,0 +1,5 @@
+packages:
+  - app
+  - scripts
+  - sdk/packages/*
+  - sdk/third_party/stellar-confidential-token-demo/packages/sdk

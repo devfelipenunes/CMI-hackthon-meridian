@@ -1,0 +1,29 @@
+# dependências e builds
+node_modules/
+dist/
+*.tsbuildinfo
+.vite/
+
+# testes
+test-results/
+playwright-report/
+coverage/
+**/__screenshots__/*.diff.png
+
+# segredos e estado local: chaves de desenvolvimento, tokens emitidos, deploys locais
+.env
+.env.local
+.env.*.local
+.local/
+
+# editores e sistema
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Ferramentas genéricas locais; só a skill do projeto faz parte do repositório.
+.claude/agents/
+.claude/skills/*
+!.claude/skills/cmi-front-tdd/
+!.claude/skills/cmi-front-tdd/**
