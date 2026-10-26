@@ -1,29 +1,29 @@
 # @zolvency-cmi/client
 
-O SDK do usuário do CMI Auctions — bidder e seller —, no navegador e no Node.
+The CMI Auctions user SDK — bidder and seller — in the browser and in Node.
 
 ```ts
 import { connectClient, BrowserKeyProvider, BrowserOpeningStore } from "@zolvency-cmi/client";
 
 const cmi = connectClient({
-  chain, contracts, signer /* a carteira */, prover,
-  keys: new BrowserKeyProvider({ network }),          // a chave confidencial (IndexedDB, cifrada)
-  openings: new BrowserOpeningStore({ network }),     // as aberturas do saldo, que sobrevivem a um reload (S-22)
+  chain, contracts, signer /* the wallet */, prover,
+  keys: new BrowserKeyProvider({ network }),          // the confidential key (IndexedDB, encrypted)
+  openings: new BrowserOpeningStore({ network }),     // balance openings that survive a reload (S-22)
 });
-await cmi.account.ensureRegistered();                 // conta confidencial; peça o backup: cmi.account.exportBackup(senha)
-await cmi.account.sync();                             // ao abrir o app: reabre o saldo pelos eventos do token, se preciso
-await cmi.account.deposit(amount);                    // público: escolha um valor que não revele o preço
-const bid = await cmi.bidder.prepareBid(marketId, price, quantity);   // provas no navegador; nada travado ainda
+await cmi.account.ensureRegistered();                 // confidential account; ask for the backup: cmi.account.exportBackup(password)
+await cmi.account.sync();                             // on app open: reopen the balance from token events if needed
+await cmi.account.deposit(amount);                    // public: choose an amount that does not reveal the price
+const bid = await cmi.bidder.prepareBid(marketId, price, quantity);   // proofs in the browser; nothing locked yet
 await cmi.bidder.placeBid(bid);                       // set_spender + submit_bid (D-14)
-await cmi.bidder.status(marketId);                    // filled e reembolso, depois do settlement
-await cmi.markets.get(marketId);                      // visão pública, sem preço
+await cmi.bidder.status(marketId);                    // filled and refund, after settlement
+await cmi.markets.get(marketId);                      // public view, no price
 ```
 
 - **Seller:** `createMarket`, `openMarket`, `cancelMarket`, `proceeds`.
-- **Recebimentos:** `account.sync()` (ou `account.receive(fromLedger)`) decifra o reembolso e os
-  pagamentos do settlement; `merge` os torna gastáveis.
-- **Outro navegador:** `account.importBackup(texto, senha)` restaura a chave e as aberturas;
-  `account.sync()` completa com os eventos novos (janela do RPC, ~7 dias).
-- O preço nunca sai do navegador em claro; erros são `CmiError` com `code` estável e, depois do
-  lock, `recovery: "revoke_spender"`.
-- Este pacote **não** contém o código do operador.
+- **Proceeds:** `account.sync()` (or `account.receive(fromLedger)`) decrypts the refund and the
+  settlement payments; `merge` makes them spendable.
+- **Another browser:** `account.importBackup(text, password)` restores the key and openings;
+  `account.sync()` fills in new events (the RPC window is ~7 days).
+- The price never leaves the browser in clear text; errors are `CmiError` with a stable `code` and,
+  after the lock, `recovery: "revoke_spender"`.
+- This package does **not** contain the operator code.

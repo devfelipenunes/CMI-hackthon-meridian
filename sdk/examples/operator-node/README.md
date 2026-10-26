@@ -1,23 +1,23 @@
-# Exemplo `operator-node`
+# Example `operator-node`
 
-O back-end do operador, em Node, rodando o keeper do SDK (`@zolvency-cmi/operator`) sobre os
-mercados de uma rede: `close`, `finalize` com a prova `winner_allocation`, `settle` de cada bid com
-as três pernas e a prova `settlement_binding`, e `release_unsettled` quando a delegação some.
+The operator backend, in Node, running the SDK keeper (`@zolvency-cmi/operator`) over a network's
+markets: `close`, `finalize` with the `winner_allocation` proof, `settle` of each bid with the three
+legs and the `settlement_binding` proof, and `release_unsettled` when the delegation disappears.
 
-Antes de agir num mercado, ele confere a versão dos contratos pelo hash do WASM da Auction (S-18):
-um mercado de uma versão que o SDK não conhece é pulado com `UnsupportedContractsVersion`.
+Before acting on a market, it checks the contracts version through the Auction WASM hash (S-18): a
+market from a version the SDK does not know is skipped with `UnsupportedContractsVersion`.
 
 ```bash
 ./scripts/localnet.sh up && ./scripts/deploy-local.sh
 CMI_OPERATOR_SPENDER_KEY=… CMI_OPERATOR_ENVELOPE_KEY=… CMI_OPERATOR_SUBMITTER=S… \
-  pnpm --filter @zolvency-cmi/example-operator-node start -- <endereço da Auction>
+  pnpm --filter @zolvency-cmi/example-operator-node start -- <Auction address>
 ```
 
-- `DEPLOYMENT`: o JSON do deploy (padrão: `deployments/local.json`).
-- `CMI_CONTRACTS_RELEASE`: a tag dos artefatos instalados por `scripts/fetch-artifacts.sh`
-  (padrão: os artefatos de desenvolvimento dos submódulos).
+- `DEPLOYMENT`: the deploy JSON (default: `deployments/local.json`).
+- `CMI_CONTRACTS_RELEASE`: the artifacts tag installed by `scripts/fetch-artifacts.sh` (default: the
+  submodules' development artifacts).
 
-As chaves por variável de ambiente são só para o exemplo. No back-end real, elas vêm de um
-`OperatorKeyStore` sobre o banco ou um HSM (S-11), e o processo, o agendamento e a lista de
-mercados são do back-end (S-12). O teste do exemplo é
+Keys through environment variables are for the example only. In the real backend, they come from an
+`OperatorKeyStore` over the database or an HSM (S-11), and the process, scheduling, and market list
+belong to the backend (S-12). The example's test is
 `packages/operator/test/integration/operator-node.test.ts`.

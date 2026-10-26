@@ -1,5 +1,8 @@
 # CMI Auctions — Confidential Auctions on Stellar
 
+> **Monorepo.** This project lives in `contracts/` in the CMI Auctions monorepo. The
+> [root README](../README.md) covers the product and the full stack.
+
 CMI Auctions sells tokenized RWA quotas through a **confidential, multi-unit, pay-as-bid,
 sealed-bid auction** on Stellar/Soroban. A bidder commits to a price and a quantity without
 revealing either. The operator later proves, in zero knowledge, who won and what each winner
@@ -169,7 +172,7 @@ contracts/
 ├── circuits/                   # Noir workspace: cmi_lib + the three circuits
 ├── wasm/                       # pinned auction/token WASMs, VKs and PROVENANCE.md
 ├── artifacts/                  # generated and versioned: circuits, VKs, proofs, parity vectors
-├── deployments/                # addresses per network (testnet.json)
+├── deployments/                # addresses per network, written by deploy-testnet.sh (quickstart.json is local)
 ├── e2e/                        # E2E evidence with the real token, one file per RC
 └── scripts/                    # build, circuits, fixtures, deploy, release, verify
 ```

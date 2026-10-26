@@ -1,101 +1,155 @@
 # CMI Auctions — Web app
 
-> **Monorepo.** Este projeto vive em `web/` no monorepo CMI Auctions. O setup canônico é o [README da raiz](../README.md); as instruções de submódulo/SSH abaixo descrevem o repositório standalone original.
+> **Monorepo.** This project lives in `web/` in the CMI Auctions monorepo. The
+> [root README](../README.md) covers the product and the full setup.
 
-Front-end web do **CMI Auctions**: leilão confidencial de cotas de RWA na Stellar/Soroban, multi-unidade, *pay-as-bid* e de lance selado. Só o operador da plataforma vê os preços; tudo o que é cifrado e provado (ZK) é feito pelo **SDK** (`sdk`, submódulo). Não há back-end: o app fala com a testnet pelo SDK, e a carteira do usuário assina.
+Web frontend for **CMI Auctions**: a confidential, multi-unit, pay-as-bid, sealed-bid quota
+auction for tokenized RWAs on Stellar/Soroban. The price never leaves the browser in clear text;
+ZK proofs are generated in the browser by the **SDK** ([`../sdk/`](../sdk/)).
 
-- **Planejamento, arquitetura, telas, testes e roadmap:** [`docs/`](docs/README.md). Comece por lá.
-- **Quem vai desenvolver:** leia [`CLAUDE.md`](CLAUDE.md) / [`AGENTS.md`](AGENTS.md) e a skill [`.claude/skills/cmi-front-tdd`](.claude/skills/cmi-front-tdd/SKILL.md).
-- **Status:** [`docs/ROADMAP.md`](docs/ROADMAP.md) é a única fonte. Hoje (2026-10-20): blocos 0–5 implementados no branch `fase/2-app`; scripts da testnet verificados ao vivo; `pnpm verify` e `pnpm e2e` (parte pública) verdes. Falta o leilão completo com o operador externo/Freighter.
+**Demo:** <https://cmi-hackthon-meridian-web.vercel.app> — testnet, no real funds.
 
----
+![Auction list](docs/screenshots/home.png)
+
+## What the app does
+
+| Mode | Who uses it | What it does |
+|---|---|---|
+| **Company** | seller | registers the confidential account, creates the market, locks the quotas, tracks it, reads proceeds |
+| **Investor** | bidder | registers the account, deposits XLM, places a sealed bid (two proofs in the browser), tracks it, recovers collateral |
+| **Public** | no wallet | sees markets, demand, and state — never prices |
+
+The **operator** (which closes, allocates, and settles) is the [`../operator/`](../operator/)
+project; the app only shows progress from chain events. There is no backend of its own: the app
+talks to testnet through the SDK, and the user's wallet signs.
+
+- **Planning, architecture, screens, and tests:** [`docs/`](docs/README.md)
+- **If you are going to develop:** [`CLAUDE.md`](CLAUDE.md) / [`AGENTS.md`](AGENTS.md) and the
+  [`.claude/skills/cmi-front-tdd`](.claude/skills/cmi-front-tdd/SKILL.md) skill
+- **Status:** [`docs/ROADMAP.md`](docs/ROADMAP.md) is the only source.
 
 ## Setup
 
-### 1. Ferramentas
+### 1. Tools
 
-| Ferramenta | Versão | Para quê |
+| Tool | Version | For |
 |---|---|---|
-| Node | 22 (`.node-version`) | tudo |
-| pnpm | 10.34.6, pelo corepack (`corepack enable`) | workspace com o SDK |
-| git + **SSH no GitHub** | — | os submódulos são privados |
-| Chromium do Playwright | 1.55.1 (`pnpm exec playwright install chromium`) | testes de navegador e E2E |
-| Freighter (extensão) | atual | carteira, na rede **Testnet** |
+| Node | 22 (`.node-version`) | everything |
+| pnpm | 10.34.6, via corepack (`corepack enable`) | the workspace |
+| Playwright Chromium | 1.55.1 (`pnpm exec playwright install chromium`) | browser tests and E2E |
+| Freighter (extension) | current | wallet, on **Testnet** |
 
-Não precisa de Docker nem de Rust: o front usa a testnet e o deploy que já existe.
+No Docker or Rust needed to run the frontend: it uses testnet and the deployment that already
+exists.
 
-### 2. Clonar com os submódulos
+### 2. Clone and install
 
-Os repositórios `sdk`, `contracts` e `specs` são **privados**, e as URLs nos `.gitmodules` são HTTPS. Com SSH configurado no GitHub:
+A monorepo clone already contains `web`, `sdk`, and `specs`; the links between them are versioned.
 
 ```bash
-git clone git@github.com:zolvency-CMI/web.git && cd web
-
-# submódulos do front (sdk, specs), por SSH
-git -c url."git@github.com:".insteadOf="https://github.com/" submodule update --init
-
-# submódulos do SDK (contracts, specs, stellar-confidential-token-demo)
-git -C sdk -c url."git@github.com:".insteadOf="https://github.com/" submodule update --init
+git clone --recurse-submodules https://github.com/devfelipenunes/CMI-hackthon-meridian.git cmi
+cd cmi
+./scripts/link-subprojects.sh   # no-op on a fresh clone; repairs the tree if needed
 ```
 
-> **Não use `--recursive`.** O `specs` tem um gitlink sem URL (`projetos/rs-soroban-ultrahonk`), e o `git submodule update --recursive` falha. Os dois comandos acima trazem tudo o que o front e o SDK usam.
-
-Para não repetir o `-c`, configure uma vez: `git config --global url."git@github.com:".insteadOf "https://github.com/"`.
-
-### 3. Conferir o SDK
+The frontend reads the SDK straight from the workspace, so install the SDK **first**:
 
 ```bash
-cd sdk && pnpm install && pnpm test && cd ..    # ~665 testes, ~10 s
+cd sdk && pnpm install && pnpm test && cd ..
+cd web && pnpm install
 ```
 
-Se o SDK não passa aqui, o front não vai passar: resolva antes (versão do Node, submódulos).
+If the SDK does not pass `pnpm test`, the frontend will not pass either: fix that first (Node
+version, `third_party` submodule).
 
-### 4. Configuração local (`.env.local`)
+### 3. Local configuration (`.env.local`)
 
 ```bash
+cd web
 cp .env.example .env.local
 ```
 
-- `CMI_OPERATOR_SPENDER_KEY` / `CMI_REGISTER_DATA`: a chave de desenvolvimento do operador, ou o `register_data` que ele exporta (F-03). Vazio na primeira vez: o `pnpm register-data` (passo 1.2) gera uma chave de desenvolvimento e a grava aqui. **Nunca vai para o git nem para o app.**
-- `VITE_DEV_WALLET=1`: liga a carteira de desenvolvimento (F-05). Só para testes; nunca no build público.
+- `CMI_OPERATOR_SPENDER_KEY` / `CMI_REGISTER_DATA`: the operator's development key or the
+  `register_data` it exports. Empty on the first run: `pnpm register-data` generates a development
+  key and writes it here. **It never goes into git or the bundle.**
+- `VITE_DEV_WALLET=1`: enables the development wallet. Tests only.
 
-O `.env.local` e a pasta `.local/` estão no `.gitignore`.
+`.env.local` and `.local/` are gitignored.
 
-### 5. Testnet
+### 4. Testnet
 
-- **Deploy da plataforma:** já existe (contratos `v0.1.0-rc.4`). Os endereços estão em `sdk/contracts` na `main` (`deployments/testnet.json`); o `pnpm sync:deployment` (passo 1.1) os copia para `app/public/config/testnet.json`.
-- **Contas:** friendbot (`https://friendbot.stellar.org?addr=G…`), 10.000 XLM por conta.
+- **Platform deployment:** already exists; addresses are in
+  [`app/public/config/testnet.json`](app/public/config/testnet.json) (factory, token, auditor,
+  Auction WASM hash, VKs, `registerData`, `operatorKeyId`).
+- **Accounts:** friendbot (`https://friendbot.stellar.org?addr=G…`), 10,000 XLM per account.
 - **Freighter:** Settings → Network → **Testnet**.
-- **Janela da RPC:** a RPC pública guarda ~7 dias de eventos (F-06, S-22, S-23).
-- **Operador:** é outro sistema (F-04). Sem ele rodando, os leilões param em `Closed` e, ~10 min depois (carência de 120 ledgers do deploy de teste), podem ser cancelados por timeout.
+- **RPC window:** the public RPC keeps ~7 days of events.
+- **Operator:** without it running, markets stop at `Closed` and can be cancelled by timeout after
+  the grace period. For the full auction, start [`operator/`](../operator/).
 
-### 6. Comandos
+### 5. Commands
 
 ```bash
-pnpm install          # inclui o build do @ctd/sdk do submódulo
-pnpm dev              # o app (Vite)
+cd web
+pnpm dev              # the app (Vite, http://localhost:5173)
 pnpm lint             # eslint + dependency-cruiser + typecheck
-pnpm test             # unit + flows + scripts (82 testes)
+pnpm test             # unit + flows + scripts (95 tests)
 pnpm verify           # lint + test + build + bundle test
-pnpm test:browser     # Chromium (prova e IndexedDB)
-pnpm sync:deployment  # 1.1 · endereços da testnet → app/public/config/testnet.json
-pnpm register-data    # 1.2 · register_data do operador → config
-pnpm fund             # cria/financia carteiras dev (.local/dev-wallets.json)
-pnpm token:issue      # 1.3 · token de cotas de teste, sem clawback
-pnpm e2e              # Playwright; parte pública hoje, leilão completo com operador
+pnpm test:browser     # Chromium (proofs and IndexedDB)
+pnpm sync:deployment  # testnet addresses → app/public/config/testnet.json
+pnpm register-data    # operator register_data → config
+pnpm fund             # create/fund dev wallets (.local/dev-wallets.json)
+pnpm token:issue      # test quota token, no clawback
+pnpm e2e              # Playwright; the public part needs no operator
 ```
 
-**Carteira dev.** O botão aparece só em build de teste: `VITE_DEV_WALLET=1 pnpm build` (ou `VITE_DEV_WALLET=1 pnpm dev`). A chave secreta é digitada na tela e vive apenas na memória da aba; nenhuma chave vai para o bundle.
+**Dev wallet.** The button only appears in test builds: `VITE_DEV_WALLET=1 pnpm dev` (or
+`VITE_DEV_WALLET=1 pnpm build`). The secret key is typed on screen and lives only in the tab's
+memory; no key goes into the bundle.
 
-**Config.** `app/public/config/testnet.json` já está preenchido e conferido contra a testnet (factory, token, auditor, hash do wasm da Auction, VKs, `registerData` e `operatorKeyId`). Para regerar: `pnpm sync:deployment && pnpm register-data`; o `register-data` simula um `create_market` antes de gravar.
+**Config.** `testnet.json` is already filled in and checked against testnet. To regenerate it:
+`pnpm sync:deployment && pnpm register-data`; `register-data` simulates a `create_market` before
+writing.
 
----
+## Rules for every commit
 
-## Fluxo de branches
+1. **TDD:** no production code without a failing test first ([`docs/TESTING.md`](docs/TESTING.md)).
+2. **Only the SDK speaks the protocol.** No formula, hash, witness, or encoding in the frontend.
+   The exception is classic Stellar operations the SDK does not cover (trustline, public XLM
+   balance, friendbot), done with `@stellar/stellar-sdk` at the SDK's version (14.6.1).
+3. **No secret leaks:** price, `price × qty`, keys, and openings never go into a URL,
+   `localStorage`, logs, telemetry, error messages, serialized caches, or persisted global state.
+   Price exists only in memory, during the bid.
+4. **The `operator` package and `packages/testing` never enter the app bundle.** Lint and a bundle
+   test enforce this.
+5. **Values are `bigint`** (XLM in stroops, quotas in base units). `number` is only for counts,
+   ledgers, and `bid_index`.
+6. **The wallet signs.** The app never asks for or stores the user's Stellar key (except the
+   development wallet).
+7. **The bid order is the SDK's:** `prepareBid` (proofs, nothing locked) → confirmation →
+   `placeBid` (`set_spender` → `submit_bid`).
+
+## Branch flow
+
+The frontend is on `main`. New work uses a short-lived feature branch and a PR to `main`, with a
+test commit before the implementation commit.
 
 ```text
-main ◄── PR ── preparacao/dev     (planejamento e preparação; antes do código)
-main ◄── PR ── fase/2-app         (o desenvolvimento, passo 0.1 a 7.3; commits teste → implementação)
+feature branch  ──PR──►  main
 ```
 
-O SDK tem o próprio fluxo (`fase/<n>-<nome>` → PR para a `main` do SDK). Uma mudança no SDK é feita **lá** (skill `cmi-sdk-tdd`), e depois o ponteiro do submódulo é atualizado aqui.
+A change to the SDK is made **in `sdk/`**, with that project's `cmi-sdk-tdd` skill; the frontend
+then uses the new behavior. `web/sdk` is a link to the single SDK copy in the monorepo — there is
+no submodule pointer to update.
+
+## Documentation
+
+| Document | Contents |
+|---|---|
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | layers, folders, how the SDK enters the app, each user's flow |
+| [`docs/SCREENS.md`](docs/SCREENS.md) | screens, states, and what each screen calls in the SDK |
+| [`docs/TESTING.md`](docs/TESTING.md) | TDD strategy, SDK fakes, testnet E2E |
+| [`docs/ROADMAP.md`](docs/ROADMAP.md) | the steps and the only source of status |
+| [`docs/DECISIONS.md`](docs/DECISIONS.md) | frontend decisions (F-01..F-16) |
+| [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) | Vercel deployment |
+| [`docs/requests/`](docs/requests/) | this project's requests to the SDK |

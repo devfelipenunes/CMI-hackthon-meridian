@@ -1,8 +1,8 @@
-# Exemplo `bidder-web`
+# Example `bidder-web`
 
-O bidder no navegador, com Vite: a conta confidencial (`BrowserKeyProvider`, chave no IndexedDB),
-o depósito, as duas provas (`bid_validity` e `set_spender`) no próprio navegador, o lock do
-colateral e o `submit_bid`. O preço nunca sai do navegador em claro.
+The bidder in the browser, with Vite: the confidential account (`BrowserKeyProvider`, key in
+IndexedDB), the deposit, the two proofs (`bid_validity` and `set_spender`) in the browser itself,
+the collateral lock, and `submit_bid`. The price never leaves the browser in clear text.
 
 ```bash
 ./scripts/localnet.sh up && ./scripts/deploy-local.sh
@@ -11,19 +11,21 @@ pnpm --filter @zolvency-cmi/example-bidder-web preview
 # http://localhost:4173/?rpc=http://localhost:8000/soroban/rpc&passphrase=…&factory=C…&token=C…&auditor=C…&secret=S…&market=1
 ```
 
-O que um app precisa para usar o SDK no navegador (o `vite.config.ts` e o `src/` daqui fazem isso):
+What an app needs to use the SDK in the browser (the `vite.config.ts` and `src/` here do it):
 
-- **`Buffer`:** o `@stellar/stellar-sdk` (e, por ele, o SDK) usa o `Buffer` do Node. Instale o do
-  pacote `buffer` antes de qualquer outro import (`src/polyfills.ts`).
-- **bb.js e Noir fora do pre-bundle** (`optimizeDeps.exclude`), por causa do worker e do WASM (S-14).
-- **Os artefatos** servidos pelo app com um `SHA256SUMS`, e conferidos na carga (`src/artifacts.ts`, S-06).
-- **COOP/COEP** só aceleram a prova (threads); não são obrigatórios.
-- **A carteira assina.** Aqui, só para o exemplo e o teste, a conta assina com uma chave secreta da
-  URL. Num app real, o `Signer` é a carteira do usuário (ex.: Freighter): a chave Stellar nunca
-  passa pelo app.
-- **Prova num Web Worker e backend pré-aquecido** (recomendação da S-14), para a tela não travar
-  nos ~5–10 s de cada prova. O exemplo prova na thread principal, para ficar curto.
+- **`Buffer`:** `@stellar/stellar-sdk` (and, through it, the SDK) uses Node's `Buffer`. Install the
+  `buffer` package's version before any other import (`src/polyfills.ts`).
+- **bb.js and Noir out of the pre-bundle** (`optimizeDeps.exclude`), because of the worker and WASM
+  (S-14).
+- **The artifacts** served by the app with a `SHA256SUMS`, and checked on load (`src/artifacts.ts`,
+  S-06).
+- **COOP/COEP** only speed up proving (threads); they are not required.
+- **The wallet signs.** Here, only for the example and the test, the account signs with a secret key
+  from the URL. In a real app, the `Signer` is the user's wallet (e.g. Freighter): the Stellar key
+  never passes through the app.
+- **Proof in a Web Worker and a pre-warmed backend** (S-14's recommendation), so the screen does not
+  freeze during the ~5–10 s of each proof. The example proves on the main thread to stay short.
 
-Testes: `pnpm test:examples` (o bundle não contém código do `operator` e cabe no orçamento de
-`bundle-budget.ts`) e, com a rede local no ar, `examples/bidder-web/test/integration/place-bid.test.ts`
-(o lance inteiro no Chromium).
+Tests: `pnpm test:examples` (the bundle contains no `operator` code and fits the
+`bundle-budget.ts` budget) and, with the local network up,
+`examples/bidder-web/test/integration/place-bid.test.ts` (the whole bid in Chromium).

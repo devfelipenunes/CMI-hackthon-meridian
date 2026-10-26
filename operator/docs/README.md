@@ -1,15 +1,15 @@
-# Documentação do operador
+# Operator documentation
 
-O ponto de entrada do projeto é o [README da raiz](../README.md). Aqui ficam os documentos profundos.
+The project's entry point is the [root README](../README.md). The in-depth documents live here.
 
-| Documento | Conteúdo |
+| Document | Contents |
 |---|---|
-| [ARCHITECTURE.md](ARCHITECTURE.md) | Como o serviço é dividido, como agenda por ledger, fluxo de um mercado, concorrência e segurança |
-| [API.md](API.md) | Contrato externo e interno: rotas, configuração, schema do banco, módulos, CLI e erros |
-| [DECISIONS.md](DECISIONS.md) | Por que cada escolha foi feita (OP-01..OP-22), com alternativas recusadas |
-| [RUNBOOK.md](RUNBOOK.md) | Operação: primeira subida, rede local, alertas, backup, atualização |
-| [requests/](requests/) | Pedidos deste repositório para os contratos e para o SDK |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | How the service is divided, how it schedules by ledger, a market's flow, concurrency, and security |
+| [API.md](API.md) | External and internal contract: routes, configuration, database schema, modules, CLI, and errors |
+| [DECISIONS.md](DECISIONS.md) | Why each choice was made (OP-01..OP-22), with rejected alternatives |
+| [RUNBOOK.md](RUNBOOK.md) | Operations: first start, local network, alerts, backup, upgrade |
+| [requests/](requests/) | This project's requests to the contracts and the SDK |
 
-Para entender o sistema em cinco minutos, leia o [README](../README.md) e depois
-[ARCHITECTURE.md](ARCHITECTURE.md) §2, que explica a decisão mais característica do
-serviço: agendar por ledger em vez de por relógio.
+To understand the system in five minutes, read the [README](../README.md) and then
+[ARCHITECTURE.md](ARCHITECTURE.md) §2, which explains the service's most characteristic decision:
+scheduling by ledger instead of by clock.

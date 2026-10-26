@@ -1,21 +1,21 @@
 # @zolvency-cmi/operator
 
-O SDK do operador do CMI Auctions, **só para Node** (back-end). Ele nunca entra no navegador.
+The CMI Auctions operator SDK, **Node only** (backend). It never enters the browser.
 
 ```ts
 import { CmiOperator, Keeper, InMemoryOperatorKeyStore } from "@zolvency-cmi/operator";
 
-const operator = new CmiOperator({ keys /* OperatorKeyStore: banco ou HSM */, factory, tokenAddress, prover, auction, token });
+const operator = new CmiOperator({ keys /* OperatorKeyStore: database or HSM */, factory, tokenAddress, prover, auction, token });
 const keeper = new Keeper(operator, { clock: { ledger: () => chain.latestLedger() }, onEvent });
-await keeper.run(markets /* AsyncIterable dos mercados */, signal);
+await keeper.run(markets /* AsyncIterable of markets */, signal);
 ```
 
-- `registerDataForNextMarket` (o `register_data` que o seller passa ao criar o mercado);
-- `readBids` (decifra e confere cada lance: raiz, abertura, colateral);
-- `planAllocation` + `proveAllocation` (regra do preço de corte e prova `winner_allocation`);
-- `buildSettlement` (as 3 pernas encadeadas e a prova `settlement_binding`);
-- `Keeper`: `close`, `finalize`, `cancel_expired`, `settle` (um por ledger, com retry e
-  quarentena) e `release_unsettled`, sem estado próprio — reiniciado, relê a chain.
+- `registerDataForNextMarket` (the `register_data` the seller passes when creating the market);
+- `readBids` (decrypts and checks each bid: root, opening, collateral);
+- `planAllocation` + `proveAllocation` (clearing-price rule and the `winner_allocation` proof);
+- `buildSettlement` (the three chained legs and the `settlement_binding` proof);
+- `Keeper`: `close`, `finalize`, `cancel_expired`, `settle` (one per ledger, with retry and
+  quarantine), and `release_unsettled`, with no state of its own — restarted, it re-reads the chain.
 
-As chaves vêm de um `OperatorKeyStore` que o back-end implementa (S-11). Veja o exemplo
-`examples/operator-node` do repositório.
+Keys come from an `OperatorKeyStore` the backend implements (S-11). See the repository's
+`examples/operator-node`.

@@ -1,79 +1,101 @@
-# CMI Auctions — Front-end (web)
+# CMI Auctions — Frontend (web)
 
-Este repositório é o **front-end web** do CMI Auctions: um leilão confidencial de cotas de RWA na Stellar/Soroban, multi-unidade, *pay-as-bid* e de lance selado.
+This repository is the **web frontend** of CMI Auctions: a confidential, multi-unit, pay-as-bid,
+sealed-bid quota auction for tokenized RWAs on Stellar/Soroban.
 
-**Não há back-end próprio.** O front fala com a blockchain e gera as provas ZK **só pelo SDK** (`sdk`, submódulo). Ele não reimplementa criptografia, encoding, witness nem ordem de chamadas: só compõe o SDK, a carteira e as telas.
+**There is no backend of its own.** The frontend talks to the blockchain and generates ZK proofs
+**only through the SDK** (`sdk`). It does not reimplement cryptography, encoding, witnesses, or call
+order: it only composes the SDK, the wallet, and the screens.
 
-| Quem usa | Modo no front | O que faz | Pacote do SDK |
+| Who | Frontend mode | What they do | SDK package |
 |---|---|---|---|
-| **Empresa (seller)** | Empresa | registra a conta confidencial, cria o leilão, trava as cotas (abre), cancela, acompanha e lê os recebimentos | `client` (`seller`, `account`, `markets`) |
-| **Investidor (bidder)** | Investidor | registra a conta confidencial, deposita XLM, dá o lance selado (2 provas no navegador), acompanha, recupera colateral, faz `merge` do reembolso | `client` (`bidder`, `account`, `markets`) |
-| **Público** | sem carteira | vê os leilões, a demanda pública, o estado e o resultado (nunca preços) | `client` (`markets`) |
-| **Operador (plataforma)** | **outro sistema**, fora deste repositório (F-04) | `finalize` com a prova `winner_allocation` e o `settle` de cada lance; é o único que vê os preços. O front só mostra o progresso pelos eventos | `operator` (só Node) |
+| **Company (seller)** | Company | registers the confidential account, creates the auction, locks the quotas (opens), cancels, tracks it, and reads proceeds | `client` (`seller`, `account`, `markets`) |
+| **Investor (bidder)** | Investor | registers the confidential account, deposits XLM, places the sealed bid (2 proofs in the browser), tracks it, recovers collateral, merges the refund | `client` (`bidder`, `account`, `markets`) |
+| **Public** | no wallet | sees the auctions, public demand, state, and result (never prices) | `client` (`markets`) |
+| **Operator (platform)** | **another system**, outside this project | `finalize` with the `winner_allocation` proof and each bid's `settle`; it is the only one that sees prices. The frontend only shows progress through events | `operator` (Node only) |
 
-**Rede:** testnet, com o deploy `v0.1.0-rc.4` dos contratos (F-06).
-
----
-
-## Estado atual (2026-10-20)
-
-- **Planejamento e preparação prontos.** O código ainda não começou: o desenvolvimento começa no passo **0.1** do [ROADMAP](ROADMAP.md), na branch `fase/2-app`.
-- **SDK pronto para o front:** conta confidencial no navegador (S-22) e janela de eventos da RPC (S-23) na `main` do SDK (`0693e1f`), que é para onde o submódulo aponta. Nenhum passo do front espera mais o SDK.
-- **Testnet:** deploy `v0.1.0-rc.4` no ar, conferido.
-- **Operador:** sistema externo, ainda não existe. Enquanto isso, o `register_data` usa uma chave de desenvolvimento (F-03), e o teste de ponta a ponta roda o keeper do SDK dentro do teste.
-- **Quem vai desenvolver:** [README da raiz](../README.md) (setup) → [AGENTS.md](../AGENTS.md) → skill [`cmi-front-tdd`](../.claude/skills/cmi-front-tdd/SKILL.md) → este índice.
+**Network:** testnet, with the platform deployment configured in
+[`app/public/config/testnet.json`](../app/public/config/testnet.json).
 
 ---
 
-## Índice
+## Current state (2026-10-26)
 
-| Documento | Conteúdo |
+- **Frontend implemented:** company, investor, public views, wallet integration, browser proofs,
+  and the testnet scripts. `pnpm test` passes with **95 tests**; `pnpm test:browser` covers proofs and
+  IndexedDB.
+- **Live demo:** <https://cmi-hackthon-meridian-web.vercel.app> (testnet).
+- **SDK:** ready for the frontend — confidential account in the browser (S-22) and RPC event window
+  (S-23) on the SDK's `main`.
+- **Testnet:** deploy live and checked.
+- **Operator:** now lives in [`../../operator/`](../../operator/) in the same monorepo. Without it running,
+  markets stop at `Closed` and may be cancelled by timeout; for local development, the SDK keeper
+  can run inside the test.
+- **If you are going to develop:** [root README](../README.md) (setup) → [AGENTS.md](../AGENTS.md) →
+  [`cmi-front-tdd`](../.claude/skills/cmi-front-tdd/SKILL.md) → this index.
+
+---
+
+## Index
+
+| Document | Contents |
 |---|---|
-| [ARCHITECTURE.md](ARCHITECTURE.md) | Camadas, pastas, como o SDK entra no app, fluxos de cada pessoa, segurança |
-| [SCREENS.md](SCREENS.md) | Telas, estados e o que cada tela chama no SDK |
-| [TESTING.md](TESTING.md) | Estratégia TDD do front: níveis, fakes do SDK, E2E na testnet |
-| [ROADMAP.md](ROADMAP.md) | Os passos (desenvolvidos de uma vez, numa fase só) e a **única fonte de status** |
-| [DECISIONS.md](DECISIONS.md) | Decisões locais do front (F-01..F-16), incluindo as **abertas** |
-| [requests/](requests/) | Pedidos deste repositório ao SDK (`001`: estado da conta confidencial) |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | Layers, folders, how the SDK enters the app, each person's flow, security |
+| [SCREENS.md](SCREENS.md) | Screens, states, and what each screen calls in the SDK |
+| [TESTING.md](TESTING.md) | Frontend TDD strategy: levels, SDK fakes, testnet E2E |
+| [ROADMAP.md](ROADMAP.md) | The steps and the **only source of status** |
+| [DECISIONS.md](DECISIONS.md) | Frontend decisions (F-01..F-16), including **open** ones |
+| [requests/](requests/) | This project's requests to the SDK (`001`: confidential account state) |
 
 ---
 
-## Fontes da verdade
+## Sources of truth
 
-| Pasta | Papel |
+| Folder | Role |
 |---|---|
-| `sdk/` (submódulo) | **Manda nas regras de negócio e na API.** Código de `packages/{core,client,operator}` e `docs/API.md`. Em conflito com qualquer documento, vale o código do SDK |
-| `sdk/contracts/` (submódulo do SDK) | Interface on-chain: `docs/CONTRACTS.md` (funções, erros, eventos) |
-| `specs/` (submódulo) | Produto e jornada (`user-history/quota-auction-journey.md`), specs RF-01..RF-22, ADRs. **Pode estar desatualizado:** se diverge do SDK, vale o SDK |
-| `docs/` (este) | **Como e em que ordem** o front é feito |
+| `../sdk/` (link) | **Governs business rules and the API.** `packages/{core,client,operator}` code and each package's README. On conflict with any document, the SDK code wins |
+| `../contracts/` (link) | On-chain interface: functions, errors, events, artifacts |
+| `../specs/` (link) | Product and journey (`user-history/quota-auction-journey.md`), RF-01..RF-22, ADRs. **May be out of date:** if it diverges from the SDK, the SDK wins |
+| `docs/` (this folder) | **How and in what order** the frontend is built |
 
-**Regra de conflito.**
-- `docs/` contradiz o código do SDK → vale o SDK, e `docs/` é corrigido no mesmo commit.
-- O front precisa de algo que o SDK não oferece → **não reimplementa**: registra um pedido em `docs/requests/`, a mudança é feita **no SDK** (F-14), e o submódulo é atualizado aqui.
-- **Os submódulos não são editados daqui.**
+**Conflict rule.**
+- `docs/` contradicts the SDK code → the SDK wins, and `docs/` is fixed in the same commit.
+- The frontend needs something the SDK does not offer → **do not reimplement it**: file a request in
+  `docs/requests/`, make the change **in the SDK** (F-14); `sdk/` is a link to the same tree, so the
+  change is visible here immediately.
+- **Do not edit the sibling projects from here.** `sdk/`, `specs/`, and `contracts/` are links to the
+  single copy in the monorepo; a change to them belongs to their own project and flow.
 
 ---
 
-## Fluxo de trabalho
+## Workflow
 
-Diferente do SDK (fases → PR por passo), o front é desenvolvido **de uma vez**, numa fase só (F-15):
+Unlike the SDK (phases → one PR per step), the frontend was developed **all at once**, in a single
+phase (F-15). It is now on `main`; new changes use a short-lived feature branch and a PR to `main`.
 
 ```text
-fase/2-app  ──commits por passo (teste vermelho, depois verde)──►  PR único para main
+feature branch  ──commits per step (red test, then green)──►  PR to main
 ```
 
-Antes do desenvolvimento, a preparação (`preparacao/dev`) entra na `main` por um PR próprio. Detalhe das branches na F-15.
+- Every [ROADMAP](ROADMAP.md) step still starts with tests (TDD) and a "Done when".
+- Commits: `type(scope): description`. The red-test commit is separate from the implementation
+  commit.
+- Step order follows dependencies. Independent steps can run in parallel.
 
-- Cada passo do [ROADMAP](ROADMAP.md) continua com testes primeiro (TDD) e um "Pronto quando".
-- Commits: `tipo(escopo): descrição`. O commit dos testes vermelhos vem separado do da implementação.
-- A ordem dos passos é a das dependências. Passos independentes podem andar em paralelo.
+## Rules for every commit
 
-## Regras que valem para todo commit
-
-1. **TDD:** nenhum código de produção sem um teste vermelho antes ([TESTING.md](TESTING.md)).
-2. **Só o SDK fala com o protocolo.** Nenhuma fórmula, hash, witness ou encoding no front. A exceção são operações **clássicas** da Stellar que o SDK não cobre (trustline, saldo XLM público, friendbot), feitas com `@stellar/stellar-sdk` na mesma versão do SDK (14.6.1).
-3. **Nenhum segredo vaza:** preço, `price × qty`, chaves e aberturas nunca vão para URL, `localStorage`, log, telemetria, mensagem de erro, cache serializado ou estado global persistido. Preço só existe em memória, durante o lance (F-11).
-4. **O pacote `operator` e o `packages/testing` nunca entram no bundle do app** (S-02 do SDK). A regra é checada por lint e por teste de bundle.
-5. **Valores são `bigint`** (XLM em stroops, cotas em unidades base). `number` só para contagens, ledgers e `bid_index`.
-6. **A carteira assina.** O app nunca pede nem guarda a chave Stellar do usuário (exceto a carteira de desenvolvimento, F-05).
-7. **A ordem do lance é a do SDK:** `prepareBid` (provas, nada travado) → confirmação → `placeBid` (`set_spender` → `submit_bid`).
+1. **TDD:** no production code without a failing test first ([TESTING.md](TESTING.md)).
+2. **Only the SDK speaks the protocol.** No formula, hash, witness, or encoding in the frontend.
+   The exception is classic Stellar operations the SDK does not cover (trustline, public XLM
+   balance, friendbot), done with `@stellar/stellar-sdk` at the SDK's version (14.6.1).
+3. **No secret leaks:** price, `price × qty`, keys, and openings never go into a URL, `localStorage`,
+   logs, telemetry, error messages, serialized caches, or persisted global state. Price exists only
+   in memory, during the bid (F-11).
+4. **The `operator` package and `packages/testing` never enter the app bundle** (S-02 of the SDK).
+   Lint and a bundle test enforce this.
+5. **Values are `bigint`** (XLM in stroops, quotas in base units). `number` is only for counts,
+   ledgers, and `bid_index`.
+6. **The wallet signs.** The app never asks for or stores the user's Stellar key (except the
+   development wallet, F-05).
+7. **The bid order is the SDK's:** `prepareBid` (proofs, nothing locked) → confirmation →
+   `placeBid` (`set_spender` → `submit_bid`).

@@ -1,136 +1,151 @@
-# CMI Auctions — Operador
+# CMI Auctions — Operator
 
-O **operador** é o serviço que faz um leilão confidencial de cotas de RWA acontecer na Stellar/Soroban. Ele roda sozinho, o tempo todo, e é o único participante capaz de fechar, decidir e liquidar um mercado (ADR-024 D12).
+The **operator** is the service that makes a confidential RWA quota auction happen on
+Stellar/Soroban. It runs on its own, all the time, and is the only participant able to close,
+judge, and settle a market (ADR-024 D12).
 
-Não é um front-end e não é uma carteira: é um **daemon Node/TypeScript** que observa a chain, decide o próximo passo de cada mercado e assina as transações.
+It is not a frontend and not a wallet: it is a **Node/TypeScript daemon** that watches the chain,
+decides each market's next step, and signs the transactions.
 
 ```
-      seller / bidders                        administrador
+      seller / bidders                        administrator
             │                                       │
             │  GET /v1/register-data                │  API key
             └──────────────────►┌──────────────┐◄───┘
                                 │   operator   │
                                 │ Fastify+API  │
                                 │ discovery    │
-                                │ agenda       │
+                                │ scheduler    │
                                 │ executor     │
                                 │ keystore     │
                                 └──────┬───────┘
-                                       │ assina como submitter
+                                       │ signs as submitter
                     ───────────────────▼───────────────────
                     Stellar RPC · Factory · Auction · Token
 ```
 
 ---
 
-## O que o serviço faz
+## What the service does
 
-| O serviço faz | Por quê |
+| It does | Why |
 |---|---|
-| **Descobre** cada mercado novo varrendo a Factory, sem ninguém avisar | Um mercado pode ser criado por qualquer seller, a qualquer momento (RF-02) |
-| **Acompanha** cada mercado pelo ledger da rede | As janelas do leilão são contadas em ledgers, não em horas (RF-21) |
-| **Fecha** o mercado no `close_ledger` | Depois disso não entra lance (RF-16) |
-| **Decide os vencedores**: decifra os envelopes, confere as provas, calcula a alocação e prova o resultado | Só o operador tem `sk_op` para abrir os lances (RF-17..RF-19) |
-| **Paga**: liquida cada lance — vendedor, taxa, reembolso, cotas — um por ledger | O settlement é pesado e tem limite de um por ledger (RF-20, ADR-026) |
-| **Encerra o que não dá para liquidar** e **cancela por timeout** | Um leilão travado precisa terminar, não ficar pendurado (RF-19, RF-20) |
-| **Guarda as chaves** do operador cifradas | O serviço precisa delas em memória para assinar (ADR-024 D5) |
-| **Expõe uma API** para observar e operar | Estado, mercados, ações, alertas e o `register_data` que o seller usa |
+| **Discovers** every new market by scanning the Factory, with no notification | A market can be created by any seller at any time (RF-02) |
+| **Tracks** each market by the network ledger | Auction windows are counted in ledgers, not hours (RF-21) |
+| **Closes** the market at `close_ledger` | After that, no bid enters (RF-16) |
+| **Decides the winners**: decrypts envelopes, checks proofs, computes the allocation, proves the result | Only the operator has `sk_op` to open bids (RF-17..RF-19) |
+| **Pays**: settles each bid — seller, fee, refund, quotas — one per ledger | Settlement is heavy and limited to one per ledger (RF-20, ADR-026) |
+| **Closes what cannot settle** and **cancels on timeout** | A stuck auction must end, not hang (RF-19, RF-20) |
+| **Stores the operator keys** encrypted | The service needs them in memory to sign (ADR-024 D5) |
+| **Exposes an API** to observe and operate | State, markets, actions, alerts, and the `register_data` the seller uses |
 
-O protocolo — criptografia, provas, encoding, ordem das chamadas, regra do keeper — **não mora aqui**. Ele vem do SDK (`@zolvency-cmi/operator`). Este repositório hospeda o processo: agendamento, persistência, chaves e alertas (S-12 do SDK).
-
----
-
-## A ideia central
-
-Três princípios explicam quase todo o desenho:
-
-1. **A chain é a verdade.** O banco é índice, agenda e trilha de auditoria. Toda decisão é tomada sobre o estado relido da chain; se banco e chain divergem, vence a chain (OP-05).
-2. **Tempo é ledger, não relógio.** `close_ledger` e `finalize_by_ledger` são conhecidos desde a criação do mercado e não mudam. O serviço acorda a cada ledger e só age nos mercados cuja hora chegou (OP-04).
-3. **O operador não publica preço.** Ele conhece todos os preços — é ele quem os decifra — mas nenhuma rota, log ou alerta os devolve, nem para o administrador (OP-16).
-
-O resto decorre disso: por que não usar cron, por que o settlement é um por ledger, por que a descoberta não usa eventos. Cada escolha está registrada em [docs/DECISIONS.md](docs/DECISIONS.md).
+The protocol — cryptography, proofs, encoding, call order, keeper rule — **does not live here**. It
+comes from the SDK (`@zolvency-cmi/operator`). This project hosts the process: scheduling,
+persistence, keys, and alerts (S-12 of the SDK).
 
 ---
 
-## Como rodar
+## The central idea
 
-O operador consome o **SDK** e o deployment por caminhos irmãos:
+Three principles explain almost the entire design:
+
+1. **The chain is the truth.** The database is an index, a schedule, and an audit trail. Every
+   decision is made on state re-read from the chain; if the database and the chain diverge, the
+   chain wins (OP-05).
+2. **Time is ledger, not clock.** `close_ledger` and `finalize_by_ledger` are known when the market
+   is created and never change. The service wakes on every ledger and acts only on markets whose
+   time has come (OP-04).
+3. **The operator does not publish prices.** It knows every price — it is the one who decrypts
+   them — but no route, log, or alert returns them, not even to the administrator (OP-16).
+
+Everything else follows: why not cron, why settlement is one per ledger, why discovery does not use
+events. Each choice is recorded in [docs/DECISIONS.md](docs/DECISIONS.md).
+
+---
+
+## How to run it
+
+The operator consumes the **SDK** and the deployment through sibling paths:
 
 ```
 cmi/
-├── operator/   ← este projeto
-├── sdk/        protocolo em TypeScript
-├── specs/      produto, RFs e ADRs
-└── contracts/  interface on-chain e artefatos
+├── operator/   ← this project
+├── sdk/        protocol in TypeScript
+├── specs/      product, RFs, and ADRs
+└── contracts/  on-chain interface and artifacts
 ```
 
 ```bash
-./scripts/setup-sdk.sh    # submódulos, build e teste do SDK, depois install aqui
-cp .env.example .env      # ajuste CMI_NETWORK e as API keys
-pnpm cli init-master      # data/master.key — guarde separado do banco
-pnpm start                # sobe API + laço do keeper
+./scripts/setup-sdk.sh    # submodules, SDK build and tests, then install here
+cp .env.example .env      # adjust CMI_NETWORK and the API keys
+pnpm cli init-master      # data/master.key — keep it separate from the database
+pnpm start                # starts the API + keeper loop
 ```
 
-Swagger UI em `http://127.0.0.1:8080/docs` (header `x-api-key`).
+Swagger UI at `http://127.0.0.1:8080/docs` (header `x-api-key`).
 
-A sequência completa — chaves, deploy da plataforma, fee wallet, primeira subida — está em [docs/RUNBOOK.md](docs/RUNBOOK.md) §1.
+The full sequence — keys, platform deployment, fee wallet, first start — is in
+[docs/RUNBOOK.md](docs/RUNBOOK.md) §1.
 
 ```bash
 pnpm lint       # eslint + dependency-cruiser + typecheck
-pnpm test       # unit + integração + api
-pnpm test:e2e   # rede local (exige Docker) ou testnet
+pnpm test       # unit + integration + api
+pnpm test:e2e   # local network (requires Docker) or testnet
 ```
 
 ---
 
-## O que ele precisa para subir
+## What it needs to start
 
-| Peça | De onde vem |
+| Piece | Where it comes from |
 |---|---|
-| **Deployment** | `deployments/<rede>.json` — RPC, passphrase, endereços da Factory, do token e do auditor |
-| **Chave mestra** | arquivo com permissão 600 (ou variável de ambiente); cifra a tabela `keys` |
-| **Chaves do operador** | `spender` (`sk_op`), `envelope`, `submitter`, `fee_wallet_*`; geradas/importadas pela CLI |
-| **API keys** | `read` e `admin`, guardadas como sha256 no ambiente |
+| **Deployment** | `deployments/<network>.json` — RPC, passphrase, Factory, token, and auditor addresses |
+| **Master key** | file with 600 permissions (or an environment variable); encrypts the `keys` table |
+| **Operator keys** | `spender` (`sk_op`), `envelope`, `submitter`, `fee_wallet_*`; generated/imported by the CLI |
+| **API keys** | `read` and `admin`, stored as sha256 in the environment |
 
-Antes de operar, o boot confere rede, artefatos (sha256), chaves e fee wallet. Se algo estiver errado, o processo **não sobe** — e não imprime valor secreto (OP-13).
+Before operating, boot checks the network, artifacts (sha256), keys, and fee wallet. If anything is
+wrong, the process **does not start** — and it never prints a secret value (OP-13).
 
-O deployment da testnet já está em [`deployments/testnet.json`](deployments/testnet.json): oito contratos implantados, com o hash de cada WASM e as VKs dos circuitos.
+The testnet deployment is already in [`deployments/testnet.json`](deployments/testnet.json): eight
+contracts deployed, with each WASM's hash and the circuit VKs.
 
 ---
 
-## Estado atual
+## Current state
 
-| Área | Situação |
+| Area | Status |
 |---|---|
-| Config, logger, banco, keystore, CLI | Implementado |
-| Descoberta, sync, agenda, laço por ledger, lease | Implementado |
-| Fechar, finalizar, liquidar, timeout, alertas | Implementado |
-| API HTTP (status, mercados, ações, alertas, operação, `register_data`) | Implementado |
-| E2E de um leilão completo | Escrito; roda contra rede local (Docker) ou testnet |
+| Config, logger, database, keystore, CLI | Implemented |
+| Discovery, sync, scheduler, per-ledger loop, lease | Implemented |
+| Close, finalize, settle, timeout, alerts | Implemented |
+| HTTP API (status, markets, actions, alerts, operations, `register_data`) | Implemented |
+| End-to-end auction | Written; runs against a local network (Docker) or testnet |
 
-Limitações conscientes do MVP, não bugs:
+Conscious MVP limitations, not bugs:
 
-- A chave de envelope é a dos POCs — qualquer um pode ler os envelopes on-chain (OP-10).
-- Um bid em quarentena só volta a ser tentado após reiniciar o serviço (OP-19).
-- Chaves no banco, sem HSM (ADR-024 D5).
-- Operador fora do ar = leilões parados (ADR-024 D12).
+- The envelope key is the POCs' key — anyone can read the envelopes on-chain (OP-10).
+- A quarantined bid is only retried after the service restarts (OP-19).
+- Keys in the database, no HSM (ADR-024 D5).
+- Operator down = auctions stopped (ADR-024 D12).
 
 ---
 
-## Documentação
+## Documentation
 
-| Documento | Conteúdo |
+| Document | Contents |
 |---|---|
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Como o serviço é dividido, como agenda por ledger, fluxo de um mercado, concorrência e segurança |
-| [docs/API.md](docs/API.md) | Contrato externo e interno: rotas, configuração, schema do banco, módulos, CLI e erros |
-| [docs/DECISIONS.md](docs/DECISIONS.md) | Por que cada escolha foi feita (OP-01..OP-22), com alternativas recusadas |
-| [docs/RUNBOOK.md](docs/RUNBOOK.md) | Operação: primeira subida, rede local, alertas, backup, atualização |
-| [docs/requests/](docs/requests/) | Pedidos deste repositório para os contratos e para o SDK |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | How the service is divided, how it schedules by ledger, a market's flow, concurrency, and security |
+| [docs/API.md](docs/API.md) | External and internal contract: routes, configuration, database schema, modules, CLI, and errors |
+| [docs/DECISIONS.md](docs/DECISIONS.md) | Why each choice was made (OP-01..OP-22), with rejected alternatives |
+| [docs/RUNBOOK.md](docs/RUNBOOK.md) | Operations: first start, local network, alerts, backup, upgrade |
+| [docs/requests/](docs/requests/) | This project's requests to the contracts and the SDK |
 
-## Fontes da verdade
+## Sources of truth
 
-`specs/` (produto, RFs, ADRs), `sdk/` (protocolo em TypeScript) e `contracts/` (interface on-chain) mandam. Quando `docs/` contradiz qualquer um deles, vale o outro — e `docs/` é corrigido.
+`specs/` (product, RFs, ADRs), `sdk/` (TypeScript protocol), and `contracts/` (on-chain interface)
+govern. When `docs/` contradicts any of them, they win — and `docs/` is fixed.
 
-## Licença
+## License
 
-MIT. Ver [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).
