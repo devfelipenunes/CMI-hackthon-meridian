@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: 248 250 252;
+    --bg-sunken: 238 242 246;
+    --surface: 255 255 255;
+    --ink: 15 23 42;
+    --ink-2: 71 85 105;
+    --ink-3: 100 116 139;
+    --line: 226 232 240;
+    --line-strong: 203 213 225;
+    --primary: 99 91 255;
+    --primary-soft: 238 236 255;
+    --accent: 0 168 143;
+    --success: 15 159 110;
+    --warning: 180 83 9;
+    --danger: 220 38 38;
+    --focus: 99 91 255;
+
+    color-scheme: light;
+  }
+
+  html.dark {
+    --bg: 3 7 18;
+    --bg-sunken: 7 11 18;
+    --surface: 11 15 25;
+    --ink: 243 244 246;
+    --ink-2: 168 176 189;
+    --ink-3: 139 147 161;
+    --line: 31 41 55;
+    --line-strong: 51 65 85;
+    --primary: 124 117 255;
+    --primary-soft: 23 21 51;
+    --accent: 0 212 178;
+    --success: 52 211 153;
+    --warning: 251 191 36;
+    --danger: 248 113 113;
+    --focus: 165 160 255;
+
+    color-scheme: dark;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    font-feature-settings: "ss01" on, "cv11" on;
+  }
+
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+    min-height: 100dvh;
+  }
+
+  ::selection {
+    background: rgb(var(--primary) / 0.18);
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--focus));
+    outline-offset: 2px;
+  }
+
+  :where(a, button, input, select, textarea):focus-visible {
+    outline-offset: 2px;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  dialog::backdrop {
+    background: rgb(3 7 18 / 0.42);
+    backdrop-filter: blur(2px);
+  }
+
+  dialog[open] {
+    animation: dialog-in 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px) scale(0.995);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+
+  .rule-list {
+    @apply divide-y divide-line border-y border-line;
+  }
+
+  .row-link {
+    @apply -mx-3 flex items-center gap-4 rounded-control px-3 transition-colors duration-150 hover:bg-sunken focus-visible:bg-sunken;
+  }
+
+  .numeric {
+    @apply font-mono tabular-nums tracking-tight;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .label {
+    @apply text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-3;
+  }
+
+  .hairline {
+    @apply border-line;
+  }
+}
