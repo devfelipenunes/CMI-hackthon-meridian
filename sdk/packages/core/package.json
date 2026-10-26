@@ -1,0 +1,49 @@
+{
+  "name": "@zolvency-cmi/core",
+  "version": "0.1.0",
+  "description": "Núcleo do SDK do CMI Auctions: cripto ZK (Poseidon2, Grumpkin), witness e provas UltraHonk, Confidential Token e acesso à Stellar/Soroban.",
+  "private": false,
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zolvency-CMI/sdk.git",
+    "directory": "packages/core"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "scripts": {
+    "build": "node ../../scripts/build-packages.mjs"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    },
+    "types": "./dist/index.d.ts"
+  },
+  "dependencies": {
+    "@aztec/bb.js": "0.87.0",
+    "@noble/curves": "1.9.7",
+    "@noble/hashes": "1.8.0",
+    "@noir-lang/noir_js": "1.0.0-beta.9",
+    "@stellar/stellar-sdk": "14.6.1",
+    "@zkpassport/poseidon2": "0.6.2",
+    "@zolvency-cmi/artifacts": "workspace:*"
+  },
+  "devDependencies": {
+    "@ctd/sdk": "workspace:*"
+  }
+}

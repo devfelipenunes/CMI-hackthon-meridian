@@ -1,0 +1,267 @@
+{
+  "//": "Or\u00e1culos tempor\u00e1rios (DECISIONS S-19) at\u00e9 a release dos contratos publicar parity-vectors/*.json. Valores impressos pela cmi_lib do contracts @ e50a6aa (circuits/cmi_lib, nargo 1.0.0-beta.9, `nargo test --show-output`) e pelos testes Rust de contracts/auction/src/test/crypto.rs. Cada entrada cita a origem.",
+  "poseidon2": [
+    {
+      "inputs": [
+        "1001",
+        "650",
+        "42",
+        "7",
+        "111222333444",
+        "999888777"
+      ],
+      "out": "0x02a90cb9c403c8001ce4bf3f4ed7376804d7101074cb1ebc42cdb13069136281",
+      "from": "contracts/circuits/cmi_lib/src/poseidon2.nr"
+    },
+    {
+      "inputs": [
+        "1002",
+        "5",
+        "6",
+        "0"
+      ],
+      "out": "0x21e3ac7533988800a82ff5c91e9ee5d7dd406c910488a117ca83e196f120ea52",
+      "from": "contracts/circuits/cmi_lib/src/poseidon2.nr"
+    },
+    {
+      "inputs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "out": "0x01dec21c6e1b30609eda618d7e35e5d9d6152f8fa67320d939c1a89603647142",
+      "from": "contracts/circuits/cmi_lib/src/poseidon2.nr"
+    },
+    {
+      "inputs": [
+        "1",
+        "2",
+        "3"
+      ],
+      "out": "0x23864adb160dddf590f1d3303683ebcb914f828e2635f6e85a32f0a1aecd3dd8",
+      "from": "contracts/circuits/cmi_lib/src/poseidon2.nr"
+    },
+    {
+      "inputs": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "out": "0x130bf204a32cac1f0ace56c78b731aa3809f06df2731ebcf6b3464a15788b1b9",
+      "from": "cmi_lib poseidon2::hash (nargo)"
+    },
+    {
+      "inputs": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "out": "0x2247be7014a54d17342a7ef677f58d28877780d203860396967f5d0a18d259db",
+      "from": "cmi_lib poseidon2::hash (nargo)"
+    }
+  ],
+  "bid": {
+    "price": "650",
+    "marketId": "42",
+    "participantId": 7,
+    "blinding": "111222333444",
+    "nullifierSeed": "999888777",
+    "commitment": "0x02a90cb9c403c8001ce4bf3f4ed7376804d7101074cb1ebc42cdb13069136281",
+    "nullifier": "0x21d77d4f960c119141d7521102123fcebae39561f9d6cc958a05987bac58a86d",
+    "leaf0": "0x145f2247e344c87afc9ca575bedd1b67b3845f621c594e7b6f74165effd9a9ca",
+    "leaf7": "0x0644492bc19bd78ad04d67ff3bcb503e6348773f666c018a7f3959b8be200574",
+    "from": "commitment: cmi_lib bid::commitment (RF-10); nullifier: cmi_lib bid::nullifier; leaf: poseidon2::hash([1003, i, C]) na cmi_lib (ADR-005)"
+  },
+  "root": {
+    "empty": "0x036f719372f750af472b51b3560fde722f75b24a068ca6329e2f86ac08e53e46",
+    "poc4": {
+      "prices": [
+        "650",
+        "620",
+        "600",
+        "590",
+        "580",
+        "580",
+        "570",
+        "560"
+      ],
+      "blindings": [
+        "111",
+        "222",
+        "333",
+        "444",
+        "555",
+        "666",
+        "777",
+        "888"
+      ],
+      "commitment0": "0x185a3b8ad07f1deeb62410aa47c714ca42538ee8d85c5a9a1b3e72fa23018312",
+      "root": "0x2e5b8224814161a1d1313cd1be541cf4e88be94709870fad92d789398bf7efce"
+    },
+    "from": "contracts/auction/src/test/crypto.rs (root_of_empty_market_is_all_empty_leaves, root_matches_poc4_vector). POC-4 usa o commitment simplificado Poseidon2(1001, price, blinding)."
+  },
+  "curve": {
+    "from": "TOKEN_G/H e commit: cmi_lib/src/pedersen.nr (commit_uses_token_generators) = POC-3 Prover.toml. GRUMPKIN_G, 5\u00b7G e ECDH: std::embedded_curve_ops do Noir 1.0.0-beta.9 (fixed_base_scalar_mul, multi_scalar_mul).",
+    "tokenG": {
+      "x": "0x083e7911d835097629f0067531fc15cafd79a89beecb39903f69572c636f4a5a",
+      "y": "0x1a7f5efaad7f315c25a918f30cc8d7333fccab7ad7c90f14de81bcc528f9935d"
+    },
+    "tokenH": {
+      "x": "0x054aa86a73cb8a34525e5bbed6e43ba1198e860f5f3950268f71df4591bde402",
+      "y": "0x209dcfbf2cfb57f9f6046f44d71ac6faf87254afc7407c04eb621a6287cac126"
+    },
+    "commit": {
+      "value": "130000",
+      "randomness": "424242424242",
+      "x": "0x0e91b114cb2600d4488d21bf6f14dd37eb2241d43ee29e9e22dcd55647755e2e",
+      "y": "0x28063c5bb9133713fd01b62af2f12561308b27b0665fa585571d04b58a09385d"
+    },
+    "grumpkinG": {
+      "x": "0x01",
+      "y": "0x02cf135e7506a45d632d270d45f1181294833fc48d823f272c"
+    },
+    "fiveG": {
+      "x": "0x1b0986d603033be6321c1804f6f8b4b14aef014e65a64d9544a6430582694387",
+      "y": "0x1abea81d71f73426f65a8c459264a01ac86750c6d8f6f4eae608fe0c8e2d982d"
+    },
+    "ecdh": {
+      "a": "123456789",
+      "b": "987654321",
+      "x": "0x2b3a01424a5b4b6ca6fcb0bd45ae409cb97a732411cfbb4c5cf496d3e0c4088d",
+      "y": "0x0e8211d5c95685034840a8b775a732ab59b34bcf67e22abd8593651ee80c46f3"
+    }
+  },
+  "envelope": {
+    "from": "specs/POC/poc-2-envelope-consistency/circuit (print_witness_helper e Prover.toml): gerador padr\u00e3o da Grumpkin, r = 123456789012, sk_operator = 987654321098.",
+    "price": "650",
+    "blinding": "111222333444",
+    "nullifierSeed": "999888777",
+    "r": "123456789012",
+    "skOperator": "987654321098",
+    "pkOperator": {
+      "x": "0x1ebe28a1fc051bb1f14169760ae2e47374bfed3406ab44b3125c8f4d7908368c",
+      "y": "0x0e6a8b7e04813fac76d9776a7da692f6c5ee02dafdbffa94175606f8441d60c8"
+    },
+    "rPoint": {
+      "x": "0x02d88c2e9497c58ec94667c47a67d666f6f390a4445d7204777773d360fac0ce",
+      "y": "0xd64bbbdb125676503556ae4cf47019a09b21ca9b0a7f7864fff1e62ae963d4"
+    },
+    "ctPrice": "0x06323e5bddb500ecf35916ad51cff67e37c6593aed5438cc49c8f24b9e691b61",
+    "ctBlinding": "0x11df777d4ca312a001d018003ca74973e58d2d76d1036c25ca7244bdfbf147b3",
+    "ctSeed": "0x04c0f273a79bc9944b35bab2c4f768437b26963dae051ea9956d7906503fa1e7"
+  },
+  "allocation": {
+    "from": "specs/POC/poc-4-clearing-price-allocation/circuit (Prover.toml e testes). Os mesmos cen\u00e1rios viram parity-vectors/allocation.json na release dos contratos.",
+    "scenarios": [
+      {
+        "name": "poc4 8 bids: parcial na margem + empatado exclu\u00eddo",
+        "supply": 1200,
+        "prices": [
+          "650",
+          "620",
+          "600",
+          "590",
+          "580",
+          "580",
+          "570",
+          "560"
+        ],
+        "requested": [
+          200,
+          150,
+          300,
+          250,
+          400,
+          400,
+          100,
+          100
+        ],
+        "filled": [
+          200,
+          150,
+          300,
+          250,
+          300,
+          0,
+          0,
+          0
+        ],
+        "clearingPrice": "580"
+      },
+      {
+        "name": "subscri\u00e7\u00e3o baixa: todos cheios",
+        "supply": 5000,
+        "prices": [
+          "650",
+          "600",
+          "580"
+        ],
+        "requested": [
+          200,
+          500,
+          300
+        ],
+        "filled": [
+          200,
+          500,
+          300
+        ]
+      },
+      {
+        "name": "desempate FCFS: menor bid_index leva o resto",
+        "supply": 1000,
+        "prices": [
+          "650",
+          "580",
+          "580"
+        ],
+        "requested": [
+          200,
+          900,
+          900
+        ],
+        "filled": [
+          200,
+          800,
+          0
+        ],
+        "clearingPrice": "580"
+      }
+    ]
+  },
+  "settlement": {
+    "from": "specs/POC/poc-6-atomic-settlement/circuit/src/main.nr (house_fee) e POC/results/poc-6-evidence.json",
+    "cases": [
+      {
+        "price": "650",
+        "requested": 200,
+        "filled": 120,
+        "feeBps": "1000",
+        "gross": "78000",
+        "fee": "7800",
+        "feeRem": "0",
+        "seller": "70200",
+        "refund": "52000"
+      },
+      {
+        "price": "65",
+        "requested": 1,
+        "filled": 1,
+        "feeBps": "1000",
+        "gross": "65",
+        "fee": "6",
+        "feeRem": "5000",
+        "seller": "59",
+        "refund": "0"
+      }
+    ]
+  }
+}

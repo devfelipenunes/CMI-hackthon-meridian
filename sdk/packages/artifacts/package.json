@@ -1,0 +1,45 @@
+{
+  "name": "@zolvency-cmi/artifacts",
+  "version": "0.1.0",
+  "description": "Circuitos e VKs do CMI Auctions, de uma release dos contratos, conferidos por sha256.",
+  "private": false,
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zolvency-CMI/SDK-ZK-CMI.git",
+    "directory": "packages/artifacts"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./node": "./src/node.ts"
+  },
+  "files": [
+    "dist",
+    "releases/v0.1.0",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "node ../../scripts/build-packages.mjs"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      },
+      "./node": {
+        "types": "./dist/node.d.ts",
+        "import": "./dist/node.js"
+      }
+    },
+    "types": "./dist/index.d.ts"
+  },
+  "dependencies": {
+    "@noble/hashes": "1.8.0"
+  }
+}

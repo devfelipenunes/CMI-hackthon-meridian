@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CMI bidder</title>
+    <style>
+      body { font: 15px/1.5 system-ui, sans-serif; max-width: 34rem; margin: 2rem auto; padding: 0 1rem; color: #1a1a1a; background: #fafafa; }
+      label { display: block; margin: 0.5rem 0 0.2rem; font-weight: 600; }
+      input { width: 100%; padding: 0.4rem; box-sizing: border-box; }
+      button { margin-top: 1rem; padding: 0.5rem 1rem; }
+      #status { margin-top: 1rem; font-family: ui-monospace, monospace; white-space: pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <h1>Lance confidencial</h1>
+    <p>O preço nunca sai do navegador em claro: ele vira um commitment, um envelope para o operador e duas provas.</p>
+    <form id="bid">
+      <label for="market">market_id</label><input id="market" name="market" required />
+      <label for="price">Preço por cota</label><input id="price" name="price" required />
+      <label for="quantity">Cotas</label><input id="quantity" name="quantity" required />
+      <button type="submit">Dar o lance</button>
+    </form>
+    <div id="status">pronto</div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+{
+  "name": "@zolvency-cmi/operator",
+  "version": "0.1.0",
+  "description": "SDK do operador do CMI Auctions (só Node): leitura dos lances, alocação, settlement e keeper.",
+  "private": false,
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zolvency-CMI/sdk.git",
+    "directory": "packages/operator"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "node ../../scripts/build-packages.mjs"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    },
+    "types": "./dist/index.d.ts"
+  },
+  "dependencies": {
+    "@zolvency-cmi/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@stellar/stellar-sdk": "14.6.1",
+    "@zolvency-cmi/artifacts": "workspace:*",
+    "@zolvency-cmi/client": "workspace:*",
+    "@zolvency-cmi/testing": "workspace:*"
+  }
+}

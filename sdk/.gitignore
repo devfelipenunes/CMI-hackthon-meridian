@@ -1,0 +1,14 @@
+node_modules/
+dist/
+coverage/
+test-results/
+*.tsbuildinfo
+.DS_Store
+.idea/
+.vscode/
+.claude/settings.local.json
+packages/artifacts/releases/*
+!packages/artifacts/releases/.gitkeep
+
+# Deploy da rede local (scripts/deploy-local.sh): endereços de um container efêmero.
+deployments/local.json

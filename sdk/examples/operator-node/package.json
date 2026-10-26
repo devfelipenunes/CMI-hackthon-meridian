@@ -1,0 +1,15 @@
+{
+  "name": "@zolvency-cmi/example-operator-node",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Exemplo: o back-end do operador (Node) rodando o keeper sobre os mercados de uma rede.",
+  "scripts": {
+    "start": "tsx src/main.ts"
+  },
+  "dependencies": {
+    "@zolvency-cmi/artifacts": "workspace:*",
+    "@zolvency-cmi/core": "workspace:*",
+    "@zolvency-cmi/operator": "workspace:*"
+  }
+}

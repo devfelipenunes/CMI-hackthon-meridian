@@ -1,0 +1,14 @@
+{
+  "name": "@zolvency-cmi/e2e",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@stellar/stellar-sdk": "14.6.1",
+    "@zolvency-cmi/artifacts": "workspace:*",
+    "@zolvency-cmi/client": "workspace:*",
+    "@zolvency-cmi/core": "workspace:*",
+    "@zolvency-cmi/operator": "workspace:*",
+    "@zolvency-cmi/testing": "workspace:*"
+  }
+}

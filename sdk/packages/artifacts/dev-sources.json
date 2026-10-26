@@ -1,0 +1,77 @@
+{
+  "//": "Modo dev (S-06): circuitos e VKs lidos NO LUGAR, antes da release dos contratos. Os do Confidential Token vêm dos submódulos (demo e POC-5); os do CMI, do build dos contratos (contracts/artifacts, passo 3.1 de lá), com o sha256 do SHA256SUMS de lá. Caminhos relativos à raiz do repositório; sha256 conferidos em toda carga.",
+  "files": {
+    "circuits/register.json": {
+      "from": "third_party/stellar-confidential-token-demo/packages/sdk/circuits/register.json",
+      "sha256": "bf0bdaf641d31a7c01b5e58a39811685fc1981f44fa15ed1436e3de64440dd4f"
+    },
+    "circuits/withdraw.json": {
+      "from": "third_party/stellar-confidential-token-demo/packages/sdk/circuits/withdraw.json",
+      "sha256": "d48ccaf1435e5a0618ac038c668ed9d052f6fcb66237099fe353b305133559b8"
+    },
+    "circuits/transfer.json": {
+      "from": "third_party/stellar-confidential-token-demo/packages/sdk/circuits/transfer.json",
+      "sha256": "da05bd4465dc147f573beefebe826828bf8d596a769bdc7a92c7fbf97d6bd58f"
+    },
+    "circuits/set_spender.json": {
+      "from": "specs/POC/poc-5-live-confidential-token/circuits/artifacts/set_spender.json",
+      "sha256": "949c47cc6d5242d480b44be8990d39475a34dc79d22018db26a68cac506f49bc"
+    },
+    "circuits/spender_transfer.json": {
+      "from": "specs/POC/poc-5-live-confidential-token/circuits/artifacts/spender_transfer.json",
+      "sha256": "92c6cbf8ff6055207b908847f2b53c5bd9be4e273e797ea445c5c017500aa66c"
+    },
+    "circuits/revoke_spender.json": {
+      "from": "specs/POC/poc-5-live-confidential-token/circuits/artifacts/revoke_spender.json",
+      "sha256": "a195fd02610fb4ec6b419d83d164cc5cc2cf92428d0aaa01831129d8e1c6c587"
+    },
+    "vks/register.vk.bin": {
+      "from": "third_party/stellar-confidential-token-demo/packages/sdk/circuits/vks/register.vk.bin",
+      "sha256": "79a2f5f78e0466d711745c3e0ab0d974065ed5f6abcda3cebb80d5e5d4a839b0"
+    },
+    "vks/withdraw.vk.bin": {
+      "from": "third_party/stellar-confidential-token-demo/packages/sdk/circuits/vks/withdraw.vk.bin",
+      "sha256": "7c9e5e55409617123e6a48cd8e92b10f6f71d2bb00f23b11115307d396098d19"
+    },
+    "vks/transfer.vk.bin": {
+      "from": "third_party/stellar-confidential-token-demo/packages/sdk/circuits/vks/transfer.vk.bin",
+      "sha256": "7d3de3ce979e3f42d44afdfd4e90774ad540d75920c66939cb2cebaad9bd373d"
+    },
+    "vks/set_spender.vk.bin": {
+      "from": "third_party/stellar-confidential-token-demo/packages/sdk/circuits/vks/set_spender.vk.bin",
+      "sha256": "fc0bf2fd65b036d1e838e641eafae46b01e9f45bcc433a33e7d0eac433ab3dbe"
+    },
+    "vks/spender_transfer.vk.bin": {
+      "from": "third_party/stellar-confidential-token-demo/packages/sdk/circuits/vks/spender_transfer.vk.bin",
+      "sha256": "22e42d3b9dfc38fa22c22c9335e37a47e756d895ed3b0226fece38ce46277e6c"
+    },
+    "vks/revoke_spender.vk.bin": {
+      "from": "third_party/stellar-confidential-token-demo/packages/sdk/circuits/vks/revoke_spender.vk.bin",
+      "sha256": "e5e5bc6c0b12d828d3b3258b73ccfdda26cfbc4b0fa1a3ccb3ffb73ed7bd1f73"
+    },
+    "circuits/bid_validity.json": {
+      "from": "contracts/artifacts/circuits/bid_validity.json",
+      "sha256": "45e3462e44c10a0eb62e3be7a5410a60baaf1fbfef83f2419b5bbb3798b977ef"
+    },
+    "vks/bid_validity.vk.bin": {
+      "from": "contracts/artifacts/vks/bid_validity.vk.bin",
+      "sha256": "46a9634e9efc58debb781fe5c82d23788871edc7ee0eb6e0618863dec114f120"
+    },
+    "circuits/winner_allocation.json": {
+      "from": "contracts/artifacts/circuits/winner_allocation.json",
+      "sha256": "33a53a327eb374c665083888b5c062436c05483c0ab770e93eab3a6132512469"
+    },
+    "vks/winner_allocation.vk.bin": {
+      "from": "contracts/artifacts/vks/winner_allocation.vk.bin",
+      "sha256": "79cdaac8eba0eaa4a7e46da697b4f2a9217d4eb36ee92eb4e83a7464f6c3e896"
+    },
+    "circuits/settlement_binding.json": {
+      "from": "contracts/artifacts/circuits/settlement_binding.json",
+      "sha256": "402f6c9d33a939392f9f6b420712d4f8119cd29ee5507e5eb875ca4ea70581ae"
+    },
+    "vks/settlement_binding.vk.bin": {
+      "from": "contracts/artifacts/vks/settlement_binding.vk.bin",
+      "sha256": "80983ef67d8f422398c54929856a440b8c004af135042ad903f035f313ee5dd2"
+    }
+  }
+}

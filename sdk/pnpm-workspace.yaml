@@ -1,0 +1,8 @@
+packages:
+  - packages/*
+  # Roteiros E2E das release candidates e a evidência (privado, docs/TESTING.md §6).
+  - e2e
+  # Exemplos de uso (privados): operator-node, bidder-web.
+  - examples/*
+  # SDK do demo do Confidential Token, consumido do submódulo fixado (DECISIONS S-05).
+  - third_party/stellar-confidential-token-demo/packages/sdk

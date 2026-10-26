@@ -1,0 +1,3 @@
+[submodule "sdk/third_party/stellar-confidential-token-demo"]
+	path = sdk/third_party/stellar-confidential-token-demo
+	url = https://github.com/brozorec/stellar-confidential-token-demo.git
