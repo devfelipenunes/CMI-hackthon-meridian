@@ -1,0 +1,67 @@
+{
+  "contracts_tag": "v0.1.0-rc.1",
+  "contracts_commit": "637c9b4be31a6e58ea595892a11377e9e408f7ff",
+  "sdk_commit": "250e4c0ace6b69b05d083031e292e9c3118749e5",
+  "network": "quickstart-local",
+  "run_at": "2026-10-16T17:27:28.501Z",
+  "wasm_sha256": {
+    "factory": "5f9102406ff9607497697dc27c356afc8e4effc7a01ca2f1456ad6da65a6157d",
+    "auction": "573c8d35c78dcf34c83edef4b97d0e23317d80ac1bb0f7f59714f0e613f055db",
+    "confidential_token": "74b6978c0519e6a1807f54a9677c47555a7f696a3d336603a79b63773f4fb6d8",
+    "ultrahonk_verifier": "7ec8c9e50a1a2862652074bcd6df6b46e17180253c95da981db72e28e93b8e70"
+  },
+  "vk_sha256": {
+    "bid_validity": "46a9634e9efc58debb781fe5c82d23788871edc7ee0eb6e0618863dec114f120"
+  },
+  "checks": [
+    {
+      "id": "RF-08.auction_registers_in_real_token",
+      "result": "PASS",
+      "tx": "58a464716cf8d200d4b93c1acee1d28a472c5892406fa82af0dda49b69eac3de"
+    },
+    {
+      "id": "RF-09.lock_real_set_spender",
+      "result": "PASS",
+      "tx": "40a6b95b9c9ff7027b54c747990a770641fb09d0af9049c4d9f062991542df0c"
+    },
+    {
+      "id": "RF-11.submit_bid_real_ca_accepted",
+      "result": "PASS",
+      "tx": "2a4e5f1d7730a2d74856cde640334d2a016d9c2dc42ae096d1223ee5950a2090",
+      "cpu": 89080881
+    },
+    {
+      "id": "RF-14.ca_of_other_value_rejected",
+      "result": "PASS",
+      "tx": "a80ba5ef0abe5a63a5858dec5e673a2583a76ce6fe56d3fc348eb289bac9455d"
+    },
+    {
+      "id": "RF-14.short_live_until_rejected",
+      "result": "PASS",
+      "tx": "399e754196b22ef72839eb4d1730120cc9b6f81640690c701af55590e2a78dfe"
+    },
+    {
+      "id": "RF-09.revocation_detected",
+      "result": "PASS",
+      "tx": "34820852c65b2bb8fbe88c9c5eaae68c883525708a7f8f03f1986937534874a0"
+    },
+    {
+      "id": "RF-09.second_set_spender_fails_with_clear_sdk_error",
+      "result": "PASS",
+      "tx": "2862723311dd53fb19450193dd06da1a0df5c9eef6f7e1879124649ddeb4c309"
+    },
+    {
+      "id": "RF-11.below_min_creates_no_delegation",
+      "result": "PASS"
+    },
+    {
+      "id": "RF-09.rejected_after_lock_revoke_returns_funds",
+      "result": "PASS",
+      "tx": "7702be2d7ab123ea7af3c11466ce4b53ddc2b205e47398ec33305150bd7c5442"
+    }
+  ],
+  "summary": {
+    "pass": 9,
+    "fail": 0
+  }
+}

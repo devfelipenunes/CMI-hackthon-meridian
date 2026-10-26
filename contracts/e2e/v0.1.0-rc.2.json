@@ -1,0 +1,67 @@
+{
+  "contracts_tag": "v0.1.0-rc.2",
+  "contracts_commit": "5b566bc07814647c1e4ba8b65bec4c3010504f9b",
+  "sdk_commit": "f4468372a7593614e388b8c6f7079899960570dc",
+  "network": "quickstart-local",
+  "run_at": "2026-10-16T19:26:33.711Z",
+  "wasm_sha256": {
+    "factory": "5f9102406ff9607497697dc27c356afc8e4effc7a01ca2f1456ad6da65a6157d",
+    "auction": "573c8d35c78dcf34c83edef4b97d0e23317d80ac1bb0f7f59714f0e613f055db",
+    "confidential_token": "74b6978c0519e6a1807f54a9677c47555a7f696a3d336603a79b63773f4fb6d8",
+    "ultrahonk_verifier": "7ec8c9e50a1a2862652074bcd6df6b46e17180253c95da981db72e28e93b8e70"
+  },
+  "vk_sha256": {
+    "bid_validity": "46a9634e9efc58debb781fe5c82d23788871edc7ee0eb6e0618863dec114f120",
+    "winner_allocation": "79cdaac8eba0eaa4a7e46da697b4f2a9217d4eb36ee92eb4e83a7464f6c3e896",
+    "settlement_binding": "80983ef67d8f422398c54929856a440b8c004af135042ad903f035f313ee5dd2"
+  },
+  "checks": [
+    {
+      "id": "RF-20.settle_partial",
+      "result": "PASS",
+      "tx": "92d74b4aec97cc1c884ed67165d943dfc66684160293682eff5b9bdd03bbedf7",
+      "cpu": 356996741
+    },
+    {
+      "id": "RF-20.settle_full",
+      "result": "PASS",
+      "tx": "dd9b2e86c9ea21590bb24e47e2598af74b5f5275e82d5841797d6ef525cbfc09",
+      "cpu": 357227978
+    },
+    {
+      "id": "RF-20.settle_zero",
+      "result": "PASS",
+      "tx": "7dc264cce85a4bb4abd40d510859503e8fa93bad93610d3b2347ed7c1acaad01",
+      "cpu": 357006383
+    },
+    {
+      "id": "RF-20.fee_skipped_rejected",
+      "result": "PASS"
+    },
+    {
+      "id": "RF-20.fee_20pct_rejected",
+      "result": "PASS"
+    },
+    {
+      "id": "RF-20.leg_rollback",
+      "result": "PASS",
+      "tx": "e858a611830838aa757fdf9154536ed852bf646c37c16790737521bbce0a943a",
+      "cpu": 357209491
+    },
+    {
+      "id": "RF-20.release_after_real_revocation",
+      "result": "PASS",
+      "tx": "d50c85751b87c39e58876d90c7c973c1082bb5a734c4bb4194991815d55405ce"
+    },
+    {
+      "id": "RF-20.settle_cpu_under_400m",
+      "result": "PASS",
+      "tx": "dd9b2e86c9ea21590bb24e47e2598af74b5f5275e82d5841797d6ef525cbfc09",
+      "cpu": 357227978
+    }
+  ],
+  "summary": {
+    "pass": 8,
+    "fail": 0
+  }
+}
