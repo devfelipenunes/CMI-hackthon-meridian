@@ -1,0 +1,7 @@
+[toolchain]
+# Exact version, not `stable`: the versioned `wasm/auction.wasm` is what goes to the network, and
+# different rustc versions produce different bytes for the same source (1.97.1 and 1.98.1 have
+# already diverged). Without the pinned version, `check-deployment` on another machine reports
+# DIVERGE for a correct deploy.
+channel = "1.98.1"
+targets = ["wasm32v1-none"]

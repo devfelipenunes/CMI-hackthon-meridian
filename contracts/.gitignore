@@ -1,0 +1,32 @@
+# Rust
+target/
+**/target/
+
+# Snapshots written by soroban-sdk when the tests run
+test_snapshots/
+**/test_snapshots/
+
+# The working `Prover.toml` of scripts/fixtures.sh, at the package root (nargo looks for it there).
+# The real cases live in circuits/<c>/fixtures/<case>/Prover.toml.
+circuits/*/Prover.toml
+
+# The local quickstart deployment: addresses from an ephemeral network, different per container.
+# `deployments/testnet.json` is the opposite — it is what the team shares — and is versioned.
+deployments/quickstart.json
+
+# Local Claude Code configuration
+.claude/settings.local.json
+
+# Editors
+.idea/
+.vscode/
+*.iml
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# The release packages built by scripts/release.sh (uploaded to the GitHub release).
+dist/
