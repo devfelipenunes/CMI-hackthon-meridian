@@ -179,7 +179,7 @@ Plan: `plans/006-zolvency-adapter.md`
 
 ## OQ-08 — TTL constants
 
-RESOLVED. Market duration is at most 30 days and the finalization grace is 2 days (decision D7, ADR-024). The settlement margin is fixed at 1 day (≈ 17_280 ledgers) and storage TTLs cover `close_ledger + grace + margin` plus a 1-day buffer, as recorded in the implementing repository (`contracts`) (`docs/DECISIONS.md` D-05) and in ADR-024's derived parameters. Measured constraint for the margin: only one full settlement fits per ledger (ADR-026), so `settlement_margin` must cover at least `MAX_BIDS` ledgers plus retry/automation latency.
+RESOLVED. Market duration is at most 30 days and the finalization grace is 2 days (decision D7, ADR-024). The settlement margin is fixed at 1 day (≈ 17_280 ledgers) and storage TTLs cover `close_ledger + grace + margin` plus a 1-day buffer, as recorded in the implementing repository (`contracts`) (decision D-05) and in ADR-024's derived parameters. Measured constraint for the margin: only one full settlement fits per ledger (ADR-026), so `settlement_margin` must cover at least `MAX_BIDS` ledgers plus retry/automation latency.
 
 Need concrete TTL thresholds based on the Soroban SDK/network target.
 

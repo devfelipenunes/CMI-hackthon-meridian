@@ -37,7 +37,7 @@ required live_until_ledger   ≥ finalize_by_ledger + settlement_margin   (RF-09
 settlement_margin            = 1 day    ≈ 17_280 ledgers    (≥ MAX_BIDS ledgers + automation/retry buffer; one full settlement per ledger, ADR-026)
 ```
 
-**Fixed** in the implementing repository (`contracts`), `docs/DECISIONS.md`:
+**Fixed** in the implementing repository (`contracts`), in its implementation decisions:
 - **D-05:** `settlement_margin` = 1 day; storage TTLs are extended to `close_ledger + grace + settlement_margin` plus a 1-day buffer.
 - **D-04 (mechanism of D15):** each permissionless call that changes state (close, finalize, timeout cancel, a settle that settles, `release_unsettled`) pays its caller a fixed 0.5 XLM from the seller's fee reserve. Each transition happens once, so the total is bounded by `(2 + MAX_BIDS) × 0.5 XLM` = **5 XLM**, the minimum reserve required at market creation. The remainder returns to the seller when the market ends.
 

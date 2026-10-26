@@ -1,6 +1,6 @@
 # PRODUCT ROADMAP — CMI Auctions
 
-> Product roadmap: phases, MVP scope and future evolutions. The step-by-step **implementation** roadmap, and the progress of each RF, lives in the implementing repository (e.g. `contracts/docs/ROADMAP.md`).
+> Product roadmap: phases, MVP scope and future evolutions. The step-by-step **implementation** roadmap, and the progress of each RF, lives in the implementing repository.
 
 ## Phase 0 — Blocking technical spikes
 

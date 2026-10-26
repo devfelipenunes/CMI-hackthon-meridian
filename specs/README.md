@@ -16,7 +16,7 @@ It is intentionally split into small, executable documents instead of one monoli
 4. `docs/CRYPTO.md`
 5. `docs/SECURITY.md`
 6. `docs/OPEN_QUESTIONS.md`
-7. `docs/PRODUCT-ROADMAP.md` — product roadmap (phases and future evolutions). The implementation roadmap lives in the implementing repository (e.g. `contracts/docs/ROADMAP.md`)
+7. `docs/PRODUCT-ROADMAP.md` — product roadmap (phases and future evolutions). The implementation roadmap lives in the implementing repository
 8. `user-history/quota-auction-journey.md` — the non-technical user journey this whole pack implements
 
 ## Repository contract
