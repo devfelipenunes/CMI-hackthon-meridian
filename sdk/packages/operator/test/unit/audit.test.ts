@@ -111,6 +111,6 @@ describe("auditoria de privacidade (passo 6.1)", () => {
     expect(events.length).toBeGreaterThan(10);
     expect(keeperEvents.some((e) => e.kind === "settled")).toBe(true);
     assertNoSecretLeak(secrets, [clientLogger, opLogger, keeperEvents, errors, sinks.map((s) => JSON.stringify(s, (_k, v: unknown) => (typeof v === "bigint" ? v.toString() : v)))]);
-    expect(clock.ledger()).resolves.toBeLessThan(CLOSE + FINALIZATION_GRACE_LEDGERS);
-  });
+    await expect(clock.ledger()).resolves.toBeLessThan(CLOSE + FINALIZATION_GRACE_LEDGERS);
+  }, 20_000);
 });
