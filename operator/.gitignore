@@ -1,0 +1,12 @@
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+.local/
+.env
+.env.*
+!.env.example
+data/
+deployments/local.json
+test/e2e/evidence/*.tmp
+.claude/settings.local.json

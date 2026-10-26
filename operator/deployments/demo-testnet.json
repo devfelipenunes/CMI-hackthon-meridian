@@ -1,0 +1,44 @@
+{
+  "network": "testnet",
+  "rpc_url": "https://soroban-testnet.stellar.org",
+  "passphrase": "Test SDF Network ; September 2015",
+  "identity": "cmi-demo-testnet-admin",
+  "admin": "GAHXFGME3SCYMBAEABN7LGMLMBK4GC665WHXO7DPCTXSE47YOVWZAOPT",
+  "deployed_at_ledger": 5366341,
+  "contracts": {
+    "underlying": "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC",
+    "verifier": "CDDIDE75XNOGHJ7KD2NT6MCA5ZUCQMKKZVZXKJWXBF7IXJBHVJQBXLFA",
+    "auditor": "CAO6VNTIGCUV2NX23ETHPCNGHU7D2RTMWSXI2EPBPTLIV4X4NIIXVJEM",
+    "token": "CD35Q3VPTDJ5YC2PPFCMNXH2DO6JN4WZ2UVXIBC5GOTSU3OSCAIKFM4K",
+    "bid_verifier": "CD7435TQEGCUCI4SZAWD6T56SREVBILIBGKCOKRVK6MBWIOXHUUD3IVX",
+    "allocation_verifier": "CDLQ2HIMKAVK2BTRI2V6Q4HLUPO5JC6OAEFCDO5Q73XTNQT6VPG5WUKH",
+    "settlement_verifier": "CBUWRG5YNTU47XXDBKXO2G7OFGX72ZK5LQC3JVDMJRDAXIQ7MXYUEBS6",
+    "factory": "CDLPWD2C7DP4AWK6GZR3BRIZ7GQ5FDK3FEDGF3PCSTTY4ANPAQI4SA6W"
+  },
+  "auction_wasm_hash": "2215016a6de4ca0b053b8e466a06ae9235d065157be38d749bfe25d67871d4e4",
+  "auditor": {
+    "id": 0,
+    "key": "0a7ab30a28c31081bbf604c7e4d4bdc2b9e31a47981ff4007d759fca2e7679162e3baeae90aafde553fe0b934a133390a4161d6ffd9923e47c7cfa5387704876"
+  },
+  "fee_wallet": "GASEM4LKX32GHJEWSUNZ6T2C23E22YA5GHOV5SRQW4CGGRXCGEGCAKG3",
+  "finalization_grace_ledgers": 120,
+  "wasm_sha256": {
+    "confidential_token": "74b6978c0519e6a1807f54a9677c47555a7f696a3d336603a79b63773f4fb6d8",
+    "confidential_verifier": "0ececaae8cbd3c78f19d9057d80a73799b35468074081dc2d92bebe91b2e3552",
+    "confidential_auditor": "43303f4421d2bab6020f8a82312f09533c3612509677a646792b9c82cb31d05f",
+    "ultrahonk_verifier": "7ec8c9e50a1a2862652074bcd6df6b46e17180253c95da981db72e28e93b8e70",
+    "auction": "2215016a6de4ca0b053b8e466a06ae9235d065157be38d749bfe25d67871d4e4",
+    "factory": "e06f96e8f3e00bd5476ab3322b73bbecf7ea303bf3aba350e94fe46cc1f5ebac"
+  },
+  "token_vks": {
+    "register": "79a2f5f78e0466d711745c3e0ab0d974065ed5f6abcda3cebb80d5e5d4a839b0",
+    "withdraw": "7c9e5e55409617123e6a48cd8e92b10f6f71d2bb00f23b11115307d396098d19",
+    "transfer": "7d3de3ce979e3f42d44afdfd4e90774ad540d75920c66939cb2cebaad9bd373d",
+    "spender_transfer": "22e42d3b9dfc38fa22c22c9335e37a47e756d895ed3b0226fece38ce46277e6c",
+    "set_spender": "fc0bf2fd65b036d1e838e641eafae46b01e9f45bcc433a33e7d0eac433ab3dbe",
+    "revoke_spender": "e5e5bc6c0b12d828d3b3258b73ccfdda26cfbc4b0fa1a3ccb3ffb73ed7bd1f73"
+  },
+  "pending": [
+    "fee_wallet: ainda nao e uma conta confidencial (D22). Enquanto nao for, o create_market da Factory recusa todo mercado com FeeWalletNotRegistered (RF-01): registre a conta no token e troque com set_platform_config"
+  ]
+}

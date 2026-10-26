@@ -1,0 +1,58 @@
+{
+  "name": "cmi-operator-backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Back-end do operador do CMI Auctions: monitora a Stellar/Soroban, fecha, aloca, finaliza e liquida os leil\u00f5es usando o sdk.",
+  "type": "module",
+  "packageManager": "pnpm@10.34.6",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "setup:sdk": "./scripts/setup-sdk.sh",
+    "start": "tsx src/main.ts",
+    "cli": "tsx src/cli/index.ts",
+    "lint": "eslint . && pnpm run depcruise && pnpm run typecheck",
+    "depcruise": "depcruise src --config .dependency-cruiser.cjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --project unit --project integration --project api",
+    "test:unit": "vitest run --project unit",
+    "test:integration": "vitest run --project integration",
+    "test:api": "vitest run --project api",
+    "test:e2e": "vitest run --project e2e",
+    "demo:e2e:testnet": "bash scripts/demo-testnet-e2e.sh",
+    "test:proving": "vitest run --project proving"
+  },
+  "dependencies": {
+    "@fastify/cors": "11.3.0",
+    "@fastify/swagger": "9.9.1",
+    "@fastify/swagger-ui": "6.1.1",
+    "@sinclair/typebox": "0.34.52",
+    "@stellar/stellar-sdk": "14.6.1",
+    "@zolvency-cmi/artifacts": "link:../sdk/packages/artifacts",
+    "@zolvency-cmi/core": "link:../sdk/packages/core",
+    "@zolvency-cmi/operator": "link:../sdk/packages/operator",
+    "better-sqlite3": "13.0.3",
+    "fastify": "5.12.5",
+    "pino": "10.4.0",
+    "tsx": "4.23.15"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@types/better-sqlite3": "9.6.0",
+    "@types/node": "22.20.5",
+    "@zolvency-cmi/client": "link:../sdk/packages/client",
+    "@zolvency-cmi/testing": "link:../sdk/packages/testing",
+    "dependency-cruiser": "17.4.3",
+    "eslint": "9.39.5",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.71.0",
+    "vitest": "3.2.7"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "esbuild"
+    ]
+  }
+}

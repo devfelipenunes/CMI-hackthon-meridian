@@ -1,0 +1,42 @@
+{
+  "network": "testnet",
+  "rpc_url": "https://soroban-testnet.stellar.org",
+  "passphrase": "Test SDF Network ; September 2015",
+  "identity": "cmi-testnet-admin",
+  "admin": "GCYEMZMNHSTYA62GZSLZDIIIV5E3N252VD3DPCSDQ2D6GZIN2UDJHLIC",
+  "deployed_at_ledger": 5281761,
+  "contracts": {
+    "underlying": "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC",
+    "verifier": "CCRHX3T5UZLM4LOUZXGVU774TN375MCQ5E6FRSHZG3J4DRPO2ISMF4EU",
+    "auditor": "CCMU4OI2XPQWVNAW4WXR3HYKQTBB6QC2YSGYNMK6RJKD4MJI27VIRA7E",
+    "token": "CDD7G3P4RLDV3UPE4TH7N3HMR64OTJNUC7TTJVOT6L7IUHVSXQFVCVM6",
+    "bid_verifier": "CDLF6NC6DQLWKRHSYEQBT77TFZAT3ZDUAELEFPQRD3JCPPC7WD36U4LD",
+    "allocation_verifier": "CBQDKSDPK2AU4FUSGFFXXZYYZOFQLLF3RMYTLIH4RPF2XKWJHXHTBFRJ",
+    "settlement_verifier": "CB3TO6IP7MOLQY7MPBXQPZVK6L65DPJUK3BKP3MF72AKZ6H4MULW66NA",
+    "factory": "CCI7H273R7ECLXFMXHCNK4YI6Z6D6I66GTWPDU4JDL5HZZI35EMVJ32H"
+  },
+  "auction_wasm_hash": "2215016a6de4ca0b053b8e466a06ae9235d065157be38d749bfe25d67871d4e4",
+  "auditor": {
+    "id": 0,
+    "key": "16b90690980ae7fff158937376388d3d3ddbae6da550977ce764e7046f0d1998111511c87f05feacc64aa487492f3f242d1050881b793487cabde8d0e5a87538"
+  },
+  "fee_wallet": "GDL4KR45PTUCV24LIZVKE4E6SYNDJERSX3IM22A5T7TTAUX3UOEBN2EF",
+  "finalization_grace_ledgers": 120,
+  "wasm_sha256": {
+    "confidential_token": "74b6978c0519e6a1807f54a9677c47555a7f696a3d336603a79b63773f4fb6d8",
+    "confidential_verifier": "0ececaae8cbd3c78f19d9057d80a73799b35468074081dc2d92bebe91b2e3552",
+    "confidential_auditor": "43303f4421d2bab6020f8a82312f09533c3612509677a646792b9c82cb31d05f",
+    "ultrahonk_verifier": "7ec8c9e50a1a2862652074bcd6df6b46e17180253c95da981db72e28e93b8e70",
+    "auction": "2215016a6de4ca0b053b8e466a06ae9235d065157be38d749bfe25d67871d4e4",
+    "factory": "139b9926750bca0a9c3af7a655c7fe7349074dba194749c037def10156ea3853"
+  },
+  "token_vks": {
+    "register": "79a2f5f78e0466d711745c3e0ab0d974065ed5f6abcda3cebb80d5e5d4a839b0",
+    "withdraw": "7c9e5e55409617123e6a48cd8e92b10f6f71d2bb00f23b11115307d396098d19",
+    "transfer": "7d3de3ce979e3f42d44afdfd4e90774ad540d75920c66939cb2cebaad9bd373d",
+    "spender_transfer": "22e42d3b9dfc38fa22c22c9335e37a47e756d895ed3b0226fece38ce46277e6c",
+    "set_spender": "fc0bf2fd65b036d1e838e641eafae46b01e9f45bcc433a33e7d0eac433ab3dbe",
+    "revoke_spender": "e5e5bc6c0b12d828d3b3258b73ccfdda26cfbc4b0fa1a3ccb3ffb73ed7bd1f73"
+  },
+  "pending": []
+}
